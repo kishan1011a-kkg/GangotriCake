@@ -2083,8 +2083,8 @@ function generateFeedback() {
   });
   
   const masteredTopics = Object.entries(allRatings)
-    .filter(([_, ratings]) => ratings.some(r => r >= 9))
-    .map(([topic]) => topic);
+    .filter(([topicName, ratings]) => ratings.some(r => r >= 9))
+    .map(([topicName]) => topicName);
   
   if (masteredTopics.length > 0) {
     const recentMastered = masteredTopics.slice(0, 2);
@@ -2137,8 +2137,8 @@ function generateFeedback() {
   
   // Weak topics (rated below 5 twice)
   const weakTopics = Object.entries(allRatings)
-    .filter(([_, ratings]) => ratings.filter(r => r <= 5).length >= 2)
-    .map(([topic]) => topic);
+    .filter(([topicName, ratings]) => ratings.filter(r => r <= 5).length >= 2)
+    .map(([topicName]) => topicName);
   
   if (weakTopics.length > 0) {
     feedback.push({
@@ -2651,18 +2651,18 @@ function renderPerformance() {
   });
   
   const strongAreas = Object.entries(allRatings)
-    .filter(([_, ratings]) => {
+    .filter(([topicName, ratings]) => {
       const avg = ratings.reduce((a, b) => a + b, 0) / ratings.length;
       return avg >= 8;
     })
-    .map(([topic]) => topic);
+    .map(([topicName]) => topicName);
   
   const weakAreas = Object.entries(allRatings)
-    .filter(([_, ratings]) => {
+    .filter(([topicName, ratings]) => {
       const avg = ratings.reduce((a, b) => a + b, 0) / ratings.length;
       return avg <= 5;
     })
-    .map(([topic]) => topic);
+    .map(([topicName]) => topicName);
   
   document.getElementById('strongAreas').innerHTML = strongAreas.length > 0
     ? strongAreas.map(t => `<span class="badge badge-success" style="margin: 0.25rem;">${t}</span>`).join('')
