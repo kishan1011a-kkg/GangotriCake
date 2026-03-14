@@ -155,12 +155,12 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;heigh
 </style>
 </head>
 <body>
-<nav>
-  <button class="active" onclick="navigateTo('dashboard')"><span class="nav-icon">📊</span>Dashboard</button>
-  <button onclick="navigateTo('log')"><span class="nav-icon">📝</span>Log</button>
-  <button onclick="navigateTo('performance')"><span class="nav-icon">📈</span>Stats</button>
-  <button onclick="navigateTo('suggestions')"><span class="nav-icon">💡</span>Tips</button>
-  <button onclick="navigateTo('settings')"><span class="nav-icon">⚙️</span>Settings</button>
+<nav role="navigation" aria-label="Main navigation">
+  <button class="active" onclick="navigateTo('dashboard')" aria-label="Dashboard"><span class="nav-icon">📊</span>Dashboard</button>
+  <button onclick="navigateTo('log')" aria-label="Daily Log"><span class="nav-icon">📝</span>Log</button>
+  <button onclick="navigateTo('performance')" aria-label="Performance Analysis"><span class="nav-icon">📈</span>Stats</button>
+  <button onclick="navigateTo('suggestions')" aria-label="Suggestions"><span class="nav-icon">💡</span>Tips</button>
+  <button onclick="navigateTo('settings')" aria-label="Settings"><span class="nav-icon">⚙️</span>Settings</button>
 </nav>
 <main>
   <div id="page-dashboard" class="page active"></div>
@@ -308,6 +308,7 @@ function getDateStr(d){
 }
 function parseDate(s){const p=s.split('-');return new Date(+p[0],+p[1]-1,+p[2]);}
 function daysBetween(a,b){return Math.round((b-a)/MS_PER_DAY);}
+function escapeHTML(str){const d=document.createElement('div');d.textContent=str;return d.innerHTML;}
 function today(){return getDateStr(new Date());}
 function getTodayLog(){return APP.logs[today()] || null;}
 function getDayName(d){return d.toLocaleDateString('en-US',{weekday:'long'});}
@@ -643,23 +644,26 @@ function renderLog(){
   function topicCheckboxes(topics, recommended, existingTopics){
     return topics.map(t=>{
       const checked = existingTopics ? existingTopics.includes(t) : recommended.includes(t);
-      return `<label class="check-item ${checked?'checked':''}" onclick="toggleCheckItem(this)">
-        <input type="checkbox" name="topic" value="${t}" ${checked?'checked':''} onchange="updateUnderstandingSliders()"> ${t}
+      const safe = escapeHTML(t);
+      return `<label class="check-item ${checked?'checked':''}">
+        <input type="checkbox" name="topic" value="${safe}" ${checked?'checked':''} onchange="toggleCheckItem(this.parentElement);updateUnderstandingSliders()"> ${safe}
       </label>`;
     }).join('');
   }
 
   const practiceHTML = PRACTICE_ACTIVITIES.map(a=>{
     const checked = existingLog && (existingLog.practiceActivities||[]).includes(a);
-    return `<label class="check-item ${checked?'checked':''}" onclick="toggleCheckItem(this)">
-      <input type="checkbox" name="practice" value="${a}" ${checked?'checked':''}> ${a}
+    const safe = escapeHTML(a);
+    return `<label class="check-item ${checked?'checked':''}">
+      <input type="checkbox" name="practice" value="${safe}" ${checked?'checked':''} onchange="toggleCheckItem(this.parentElement)"> ${safe}
     </label>`;
   }).join('');
 
   const challengeHTML = CHALLENGES_LIST.map(c=>{
     const checked = existingLog && (existingLog.challenges||[]).includes(c);
-    return `<label class="check-item ${checked?'checked':''}" onclick="toggleCheckItem(this)">
-      <input type="checkbox" name="challenge" value="${c}" ${checked?'checked':''} onchange="handleChallengeChange(this)"> ${c}
+    const safe = escapeHTML(c);
+    return `<label class="check-item ${checked?'checked':''}">
+      <input type="checkbox" name="challenge" value="${safe}" ${checked?'checked':''} onchange="handleChallengeChange(this);toggleCheckItem(this.parentElement)"> ${safe}
     </label>`;
   }).join('');
 
@@ -734,7 +738,7 @@ function renderLog(){
 
 function toggleCheckItem(label){
   const cb = label.querySelector('input[type=checkbox]');
-  label.classList.toggle('checked', cb.checked);
+  if(cb) label.classList.toggle('checked', cb.checked);
 }
 
 function selectMood(btn){
@@ -1098,11 +1102,8 @@ function renderSuggestions(){
     catchupMsg = `<div class="feedback-item feedback-good">💪 <strong>On Track!</strong> Keep your daily ${goalH}-hour sessions consistent. You are doing well!</div>`;
   }
 
-  // Interview question of the day
-  const now = new Date();
-  const startOfYear = new Date(now.getFullYear(), 0, 1);
-  const dayOfYear = Math.floor(daysBetween(startOfYear, now)) + 1;
-  const qIdx = dayOfYear % INTERVIEW_QUESTIONS.length;
+  // Interview question of the day (use roadmap day for consistent progression)
+  const qIdx = Math.abs(rd - 1) % INTERVIEW_QUESTIONS.length;
   const iq = INTERVIEW_QUESTIONS[qIdx];
 
   // Resources
@@ -1255,7 +1256,7 @@ function importDataPrompt(){
     reader.onload = function(ev){
       try{
         const data = JSON.parse(ev.target.result);
-        if(data.settings && data.logs){
+        if(data.settings && data.logs && typeof data.settings.startDate === 'string' && typeof data.settings.dailyGoalHours === 'number' && typeof data.logs === 'object'){
           APP = data;
           saveData(APP);
           navigateTo('settings');
