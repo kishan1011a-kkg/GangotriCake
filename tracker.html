@@ -1,0 +1,1305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>⛓️ Smart Contract Developer Learning Tracker</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0f1117;--bg2:#161b22;--bg3:#1c2333;--border:#2d3548;
+  --text:#e6edf3;--text2:#8b949e;--accent:#7C3AED;--accent2:#6D28D9;
+  --green:#10B981;--red:#EF4444;--yellow:#F59E0B;--orange:#F97316;
+  --radius:12px;--shadow:0 2px 12px rgba(0,0,0,0.3);
+}
+html{font-size:16px;scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;min-height:100vh;padding-bottom:80px;overflow-x:hidden}
+a{color:var(--accent);text-decoration:none}
+h1{font-size:1.6rem;font-weight:700;margin-bottom:.5rem}
+h2{font-size:1.3rem;font-weight:600;margin-bottom:.75rem;color:var(--text)}
+h3{font-size:1.1rem;font-weight:600;margin-bottom:.5rem}
+/* NAV */
+nav{position:fixed;bottom:0;left:0;right:0;background:var(--bg2);border-top:1px solid var(--border);display:flex;justify-content:space-around;align-items:center;height:64px;z-index:1000;padding:0 4px}
+nav button{background:none;border:none;color:var(--text2);font-size:.7rem;display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;padding:6px 8px;border-radius:8px;transition:all .2s;min-width:56px}
+nav button .nav-icon{font-size:1.4rem}
+nav button.active,nav button:hover{color:var(--accent);background:rgba(124,58,237,.1)}
+/* PAGES */
+main{max-width:800px;margin:0 auto;padding:16px}
+.page{display:none;animation:fadeIn .3s ease}
+.page.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+/* CARDS */
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:16px;transition:border-color .2s}
+.card:hover{border-color:var(--accent)}
+.card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.card-label{font-size:.8rem;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.card-value{font-size:1.8rem;font-weight:700}
+.card-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:500px){.card-row{grid-template-columns:1fr}}
+/* PROGRESS BAR */
+.progress-wrap{background:var(--bg3);border-radius:20px;height:14px;overflow:hidden;margin:8px 0}
+.progress-bar{height:100%;border-radius:20px;background:linear-gradient(90deg,var(--accent),var(--green));transition:width .6s ease}
+.progress-text{font-size:.85rem;color:var(--text2)}
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 24px;border:none;border-radius:var(--radius);font-size:.95rem;font-weight:600;cursor:pointer;transition:all .2s}
+.btn-primary{background:var(--accent);color:#fff}
+.btn-primary:hover{background:var(--accent2);transform:translateY(-1px)}
+.btn-danger{background:var(--red);color:#fff}
+.btn-danger:hover{background:#dc2626}
+.btn-outline{background:transparent;border:1px solid var(--border);color:var(--text)}
+.btn-outline:hover{border-color:var(--accent);color:var(--accent)}
+.btn-block{width:100%}
+.btn-lg{padding:16px 32px;font-size:1.1rem}
+/* STATUS BADGES */
+.badge{display:inline-block;padding:4px 12px;border-radius:20px;font-size:.8rem;font-weight:600}
+.badge-green{background:rgba(16,185,129,.15);color:var(--green)}
+.badge-red{background:rgba(239,68,68,.15);color:var(--red)}
+.badge-yellow{background:rgba(245,158,11,.15);color:var(--yellow)}
+.badge-purple{background:rgba(124,58,237,.15);color:var(--accent)}
+/* FORMS */
+.form-group{margin-bottom:20px}
+.form-label{display:block;font-size:.9rem;font-weight:600;margin-bottom:8px;color:var(--text)}
+.form-input,.form-textarea,.form-select{width:100%;padding:12px 16px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);font-size:.95rem;transition:border-color .2s}
+.form-input:focus,.form-textarea:focus,.form-select:focus{outline:none;border-color:var(--accent)}
+.form-textarea{min-height:100px;resize:vertical;font-family:inherit}
+input[type=range]{-webkit-appearance:none;width:100%;height:6px;background:var(--bg3);border-radius:3px;outline:none}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:var(--accent);cursor:pointer}
+/* CHECKBOX / RADIO */
+.check-grid{display:flex;flex-wrap:wrap;gap:8px}
+.check-item{display:flex;align-items:center;gap:8px;padding:8px 14px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;cursor:pointer;transition:all .2s;font-size:.9rem}
+.check-item:hover{border-color:var(--accent)}
+.check-item.checked{border-color:var(--accent);background:rgba(124,58,237,.1)}
+.check-item input[type=checkbox]{accent-color:var(--accent);width:16px;height:16px}
+/* MOOD SELECTOR */
+.mood-grid{display:flex;gap:10px;flex-wrap:wrap}
+.mood-btn{font-size:2rem;padding:10px 14px;background:var(--bg3);border:2px solid var(--border);border-radius:var(--radius);cursor:pointer;transition:all .2s}
+.mood-btn:hover,.mood-btn.selected{border-color:var(--accent);transform:scale(1.1);background:rgba(124,58,237,.1)}
+/* HEATMAP */
+.heatmap-grid{display:grid;gap:4px}
+.heatmap-cell{width:100%;aspect-ratio:1;border-radius:3px;position:relative}
+.heatmap-cell[data-tip]:hover::after{content:attr(data-tip);position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);background:var(--bg2);color:var(--text);padding:4px 8px;border-radius:6px;font-size:.75rem;white-space:nowrap;border:1px solid var(--border);z-index:10}
+.heat-green{background:var(--green)}
+.heat-yellow{background:var(--yellow)}
+.heat-red{background:rgba(239,68,68,.5)}
+.heat-gray{background:var(--bg3)}
+.heat-empty{background:rgba(45,53,72,.3)}
+/* MINI HEATMAP */
+.mini-heatmap{display:flex;gap:6px}
+.mini-cell{width:28px;height:28px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:.65rem;color:var(--text2)}
+/* BAR CHART */
+.bar-chart{display:flex;align-items:flex-end;gap:8px;height:160px;padding:8px 0;border-bottom:1px solid var(--border)}
+.bar-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px}
+.bar{width:100%;border-radius:4px 4px 0 0;transition:height .4s ease;min-height:2px;position:relative}
+.bar-label{font-size:.7rem;color:var(--text2);text-align:center}
+.bar-value{font-size:.7rem;color:var(--text);font-weight:600}
+/* STREAK */
+.streak-display{display:flex;align-items:center;gap:8px;font-size:1.5rem;font-weight:700}
+/* MODAL */
+.modal-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.7);z-index:2000;align-items:center;justify-content:center;padding:16px}
+.modal-overlay.show{display:flex}
+.modal-content{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:28px;max-width:500px;width:100%;max-height:85vh;overflow-y:auto;animation:modalIn .3s ease}
+@keyframes modalIn{from{opacity:0;transform:scale(.9)}to{opacity:1;transform:scale(1)}}
+.modal-content h2{margin-bottom:16px}
+/* FEEDBACK */
+.feedback-item{padding:12px 16px;border-radius:var(--radius);margin-bottom:8px;font-size:.9rem;display:flex;align-items:flex-start;gap:10px;line-height:1.5}
+.feedback-good{background:rgba(16,185,129,.1);border-left:3px solid var(--green);color:var(--green)}
+.feedback-bad{background:rgba(239,68,68,.1);border-left:3px solid var(--red);color:var(--red)}
+.feedback-warn{background:rgba(245,158,11,.1);border-left:3px solid var(--yellow);color:var(--yellow)}
+/* SCORE RING */
+.score-ring{width:100px;height:100px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.8rem;font-weight:700;margin:0 auto 8px}
+/* PHASE TIMELINE */
+.phase-timeline{display:flex;flex-direction:column;gap:8px}
+.phase-row{display:flex;align-items:center;gap:12px;padding:10px 14px;background:var(--bg3);border-radius:8px;font-size:.9rem}
+.phase-row.current{border:1px solid var(--accent);background:rgba(124,58,237,.05)}
+.phase-num{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700;flex-shrink:0}
+.phase-num.done{background:var(--green);color:#fff}
+.phase-num.active{background:var(--accent);color:#fff}
+.phase-num.future{background:var(--bg);color:var(--text2);border:1px solid var(--border)}
+/* RESOURCE LIST */
+.resource-list{list-style:none;padding:0}
+.resource-list li{padding:10px 14px;background:var(--bg3);border-radius:8px;margin-bottom:6px;font-size:.9rem;display:flex;align-items:center;gap:8px}
+/* TABS within pages */
+.tab-bar{display:flex;gap:4px;margin-bottom:16px;overflow-x:auto;padding-bottom:4px}
+.tab-btn{padding:8px 16px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;color:var(--text2);font-size:.85rem;cursor:pointer;white-space:nowrap;transition:all .2s}
+.tab-btn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+/* SETTING ROWS */
+.setting-row{display:flex;justify-content:space-between;align-items:center;padding:16px 0;border-bottom:1px solid var(--border)}
+.setting-row:last-child{border-bottom:none}
+.day-checks{display:flex;gap:6px;flex-wrap:wrap}
+.day-check{padding:6px 12px;border:1px solid var(--border);border-radius:6px;cursor:pointer;font-size:.85rem;transition:all .2s;background:var(--bg3)}
+.day-check.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+/* UNDERSTANDING SLIDER */
+.understanding-row{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.understanding-row label{flex:1;font-size:.85rem;min-width:120px}
+.understanding-row input[type=range]{flex:2}
+.understanding-row .val{min-width:30px;text-align:center;font-weight:700;color:var(--accent)}
+/* VERDICT BANNER */
+.verdict-banner{text-align:center;padding:20px;border-radius:var(--radius);margin-bottom:16px}
+.verdict-banner h2{margin-bottom:4px}
+.verdict-banner p{color:var(--text2);font-size:.9rem}
+/* RESPONSIVE */
+@media(min-width:600px){
+  .card-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+  nav{position:fixed;top:0;bottom:auto;border-top:none;border-bottom:1px solid var(--border)}
+  body{padding-top:80px;padding-bottom:16px}
+}
+@media(max-width:599px){
+  .card-row-3{display:grid;grid-template-columns:1fr;gap:12px}
+  main{padding:12px}
+  h1{font-size:1.3rem}
+}
+/* SCROLLBAR */
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+</style>
+</head>
+<body>
+<nav>
+  <button class="active" onclick="navigateTo('dashboard')"><span class="nav-icon">📊</span>Dashboard</button>
+  <button onclick="navigateTo('log')"><span class="nav-icon">📝</span>Log</button>
+  <button onclick="navigateTo('performance')"><span class="nav-icon">📈</span>Stats</button>
+  <button onclick="navigateTo('suggestions')"><span class="nav-icon">💡</span>Tips</button>
+  <button onclick="navigateTo('settings')"><span class="nav-icon">⚙️</span>Settings</button>
+</nav>
+<main>
+  <div id="page-dashboard" class="page active"></div>
+  <div id="page-log" class="page"></div>
+  <div id="page-performance" class="page"></div>
+  <div id="page-suggestions" class="page"></div>
+  <div id="page-settings" class="page"></div>
+</main>
+<div id="modal" class="modal-overlay" onclick="if(event.target===this)hideModal()"></div>
+
+<script>
+/* ==================== DATA ==================== */
+const ROADMAP = [
+  {phase:1,name:"Programming Foundations",months:"Months 1–2",days:61,
+   topics:["JavaScript ES6+","OOP","Data Structures","Git & GitHub","Node.js","Command Line"]},
+  {phase:2,name:"Blockchain Fundamentals",months:"Month 3",days:30,
+   topics:["How Blockchain Works","Ethereum & EVM","Wallets & Keys","Gas & Transactions","Proof of Stake","Testnets"]},
+  {phase:3,name:"Solidity",months:"Months 4–5",days:61,
+   topics:["Data Types","Functions","Mappings & Arrays","Structs & Enums","Events","Constructor","Inheritance","Interfaces","Modifiers","Error Handling","ETH Handling","Storage vs Memory","Gas Optimization","Proxy Patterns"]},
+  {phase:4,name:"Development Tooling",months:"Month 6",days:30,
+   topics:["Foundry (forge, cast, anvil)","Hardhat","OpenZeppelin","Alchemy/Infura","Ethers.js","Chainlink"]},
+  {phase:5,name:"Token Standards & DeFi",months:"Month 7",days:31,
+   topics:["ERC-20","ERC-721","ERC-1155","ERC-4626","Uniswap V2/V3","Aave/Compound","Flash Loans"]},
+  {phase:6,name:"Security",months:"Months 8–9",days:61,
+   topics:["Reentrancy","Access Control","Integer Overflow","Oracle Manipulation","Front Running","Delegatecall","Self-Destruct","Signature Replay","Slither","Mythril","Ethernaut","Damn Vulnerable DeFi"]},
+  {phase:7,name:"Portfolio Projects",months:"Months 10–11",days:61,
+   topics:["ERC-20 Token + Staking","NFT Collection (ERC-721)","DeFi Lending Protocol","DAO with Governance","Simple DEX (AMM)"]},
+  {phase:8,name:"Job Hunt",months:"Month 12+",days:30,
+   topics:["Building Portfolio on GitHub","Applying on crypto.jobs / web3.career / remote3.co","Protocol Discord activity","Technical Interview Prep"]}
+];
+const TOTAL_DAYS = 365;
+const PRACTICE_ACTIVITIES = ["Wrote code","Deployed to testnet","Ran tests","Read documentation","Watched tutorial","Built something new"];
+const CHALLENGES_LIST = ["Didn't understand the concept","Ran out of time","Got stuck on a bug","Lost motivation","Too tired","Technical setup issues","No challenges"];
+const MOODS = [
+  {key:"exhausted",emoji:"😩",label:"Exhausted"},
+  {key:"tired",emoji:"😫",label:"Tired"},
+  {key:"neutral",emoji:"😐",label:"Neutral"},
+  {key:"good",emoji:"😊",label:"Good"},
+  {key:"energized",emoji:"🤩",label:"Energized"}
+];
+const INTERVIEW_QUESTIONS = [
+  "Explain the difference between `memory` and `storage` in Solidity.",
+  "What is a reentrancy attack and how do you prevent it?",
+  "Implement a basic ERC-20 token from scratch — what functions are required?",
+  "What is the difference between `delegatecall` and `call`?",
+  "Explain how proxy patterns work for upgradeable contracts.",
+  "Name 5 gas optimization techniques in Solidity.",
+  "How does Uniswap's constant product formula (x * y = k) work?",
+  "Explain flash loans — how do they work and what are their use cases?",
+  "What are the key differences between ERC-721 and ERC-1155?",
+  "How does Proof of Stake work on Ethereum post-Merge?",
+  "What is the Diamond pattern (EIP-2535)?",
+  "How do you implement role-based access control in a smart contract?",
+  "What is integer overflow and how does Solidity 0.8+ handle it?",
+  "How do events work in Solidity and why are they important for dApps?",
+  "Explain the difference between `require`, `assert`, and `revert`.",
+  "What is the EVM and how does it execute bytecode?",
+  "Describe your process for performing a security audit on a smart contract.",
+  "How do Chainlink oracles bring off-chain data on-chain?",
+  "What is MEV (Maximal Extractable Value) and why does it matter?",
+  "How do you write and run tests using Foundry?",
+  "Explain the CREATE2 opcode and its practical uses.",
+  "What are function selectors and how are they computed?",
+  "How does the ERC-4626 tokenized vault standard work?",
+  "What is the difference between an EOA and a contract account?",
+  "How does on-chain governance work in a DAO?",
+  "What are the risks of time-dependent logic in smart contracts?",
+  "Describe the checks-effects-interactions pattern.",
+  "How does mapping storage work internally in the EVM (keccak256 slots)?",
+  "Why is `tx.origin` dangerous for authentication?",
+  "What strategies reduce gas costs when deploying smart contracts?"
+];
+const RESOURCES = {
+  1:[
+    "📘 freeCodeCamp — JavaScript Algorithms and Data Structures",
+    "📗 Eloquent JavaScript (eloquentjavascript.net)",
+    "🎥 Traversy Media — JS Crash Course",
+    "📘 Pro Git Book (git-scm.com/book)"
+  ],
+  2:[
+    "📘 ethereum.org/learn",
+    "📗 Mastering Ethereum by Andreas Antonopoulos",
+    "🎥 Whiteboard Crypto — YouTube",
+    "📘 Bitcoin & Ethereum Whitepapers"
+  ],
+  3:[
+    "📘 docs.soliditylang.org",
+    "🎮 CryptoZombies.io",
+    "📘 Solidity by Example (solidity-by-example.org)",
+    "🎥 Patrick Collins — Solidity Course (Cyfrin Updraft)"
+  ],
+  4:[
+    "📘 Foundry Book (book.getfoundry.sh)",
+    "📘 Hardhat Documentation (hardhat.org)",
+    "📘 OpenZeppelin Docs (docs.openzeppelin.com)",
+    "📘 Ethers.js Documentation (docs.ethers.org)"
+  ],
+  5:[
+    "📘 EIP Standards (eips.ethereum.org)",
+    "📘 Uniswap V2/V3 Docs",
+    "📘 Aave Developer Docs",
+    "🎥 Smart Contract Programmer — YouTube DeFi series"
+  ],
+  6:[
+    "📘 SWC Registry (swcregistry.io)",
+    "🎮 Ethernaut by OpenZeppelin",
+    "🎮 Damn Vulnerable DeFi",
+    "📘 Trail of Bits — Building Secure Contracts"
+  ],
+  7:[
+    "📘 Build & deploy on testnets (Sepolia, Goerli)",
+    "📘 Document projects on GitHub with READMEs",
+    "📘 Write blog posts about your projects",
+    "🎥 Review audit reports from Code4rena / Sherlock"
+  ],
+  8:[
+    "🔍 crypto.jobs",
+    "🔍 web3.career",
+    "🔍 remote3.co",
+    "📘 Practice mock interviews on common Solidity patterns"
+  ]
+};
+
+/* ==================== STATE ==================== */
+const STORAGE_KEY = "blockchain_tracker";
+function defaultData(){
+  return {
+    settings:{startDate:getDateStr(new Date()),dailyGoalHours:2,offDays:["Sunday"]},
+    logs:{},
+    inProgress:[]
+  };
+}
+function loadData(){
+  try{const raw=localStorage.getItem(STORAGE_KEY);if(raw)return JSON.parse(raw);}catch(e){}
+  return defaultData();
+}
+function saveData(data){localStorage.setItem(STORAGE_KEY,JSON.stringify(data));}
+let APP = loadData();
+
+/* ==================== UTILS ==================== */
+function getDateStr(d){
+  const y=d.getFullYear(), m=String(d.getMonth()+1).padStart(2,'0'), day=String(d.getDate()).padStart(2,'0');
+  return `${y}-${m}-${day}`;
+}
+function parseDate(s){const p=s.split('-');return new Date(+p[0],+p[1]-1,+p[2]);}
+function daysBetween(a,b){return Math.round((b-a)/(86400000));}
+function today(){return getDateStr(new Date());}
+function getDayName(d){return d.toLocaleDateString('en-US',{weekday:'long'});}
+function formatDate(s){return parseDate(s).toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric',year:'numeric'});}
+
+function getRoadmapDay(){
+  const start = parseDate(APP.settings.startDate);
+  const now = new Date(); now.setHours(0,0,0,0);
+  return daysBetween(start, now) + 1;
+}
+
+function getPhaseForDay(dayNum){
+  let cum = 0;
+  for(const ph of ROADMAP){
+    if(dayNum <= cum + ph.days) return {phase:ph, dayInPhase: dayNum - cum, cumStart: cum};
+    cum += ph.days;
+  }
+  return {phase:ROADMAP[ROADMAP.length-1], dayInPhase: ROADMAP[ROADMAP.length-1].days, cumStart: cum - ROADMAP[ROADMAP.length-1].days};
+}
+
+function getTopicsForDay(dayInPhase, phase){
+  const T = phase.topics.length, D = phase.days;
+  const topics = [];
+  const idx = Math.min(Math.floor((dayInPhase - 1) * T / D), T - 1);
+  topics.push(phase.topics[idx]);
+  const idx2 = Math.min(Math.floor(dayInPhase * T / D), T - 1);
+  if(idx2 !== idx) topics.push(phase.topics[idx2]);
+  return topics;
+}
+
+function getAllTopics(){
+  const all=[];
+  ROADMAP.forEach(p=>p.topics.forEach(t=>all.push(t)));
+  return all;
+}
+
+function calculateScore(log, goalHours){
+  if(!log) return 0;
+  const hourPts = Math.min((log.hoursStudied / goalHours) * 40, 40);
+  const rd = getRoadmapDay();
+  const info = getPhaseForDay(Math.min(Math.max(rd,1), TOTAL_DAYS));
+  const recTopics = getTopicsForDay(info.dayInPhase, info.phase);
+  const coveredRec = recTopics.filter(t => (log.topicsCovered||[]).includes(t)).length;
+  const topicPts = recTopics.length > 0 ? Math.min((coveredRec / recTopics.length) * 30, 30) : ((log.topicsCovered||[]).length > 0 ? 30 : 0);
+  const ratings = Object.values(log.understandingRatings || {});
+  const avgRating = ratings.length > 0 ? ratings.reduce((a,b)=>a+b,0)/ratings.length : 0;
+  const understandPts = (avgRating / 10) * 20;
+  const practicePts = Math.min((log.practiceActivities||[]).length * 2, 10);
+  return Math.round(hourPts + topicPts + understandPts + practicePts);
+}
+
+function scoreLabel(s){
+  if(s>=85) return {label:"Excellent",cls:"badge-green"};
+  if(s>=70) return {label:"Good",cls:"badge-green"};
+  if(s>=50) return {label:"Average",cls:"badge-yellow"};
+  if(s>=30) return {label:"Poor",cls:"badge-red"};
+  return {label:"Very Poor",cls:"badge-red"};
+}
+
+function getStreak(){
+  let streak=0, d=new Date(); d.setHours(0,0,0,0);
+  const todayStr = getDateStr(d);
+  if(!APP.logs[todayStr]){
+    d.setDate(d.getDate()-1);
+  }
+  while(true){
+    const ds = getDateStr(d);
+    const dayName = getDayName(d);
+    if(APP.settings.offDays.includes(dayName)){d.setDate(d.getDate()-1);continue;}
+    if(APP.logs[ds]) streak++;
+    else break;
+    d.setDate(d.getDate()-1);
+  }
+  return streak;
+}
+
+function getLongestStreak(){
+  const start=parseDate(APP.settings.startDate), end=new Date();
+  let longest=0, cur=0, d=new Date(start);
+  while(d<=end){
+    const ds=getDateStr(d);
+    const dayName=getDayName(d);
+    if(!APP.settings.offDays.includes(dayName)){
+      if(APP.logs[ds]) cur++;
+      else{longest=Math.max(longest,cur);cur=0;}
+    }
+    d.setDate(d.getDate()+1);
+  }
+  return Math.max(longest,cur);
+}
+
+function getTotalLogged(){return Object.keys(APP.logs).length;}
+
+function getTotalMissed(){
+  const start=parseDate(APP.settings.startDate), end=new Date(); end.setHours(0,0,0,0);
+  let missed=0, d=new Date(start);
+  while(d<end){
+    const ds=getDateStr(d);
+    if(!APP.settings.offDays.includes(getDayName(d)) && !APP.logs[ds]) missed++;
+    d.setDate(d.getDate()+1);
+  }
+  return missed;
+}
+
+function getScoreColor(s){
+  if(s>=70) return 'var(--green)';
+  if(s>=50) return 'var(--yellow)';
+  return 'var(--red)';
+}
+
+function getRecentScores(n){
+  const scores=[];
+  let d=new Date(); d.setHours(0,0,0,0);
+  for(let i=0;i<n;i++){
+    const ds=getDateStr(d);
+    scores.unshift({date:ds,score:APP.logs[ds]?APP.logs[ds].score:null,day:d.toLocaleDateString('en-US',{weekday:'short'})});
+    d.setDate(d.getDate()-1);
+  }
+  return scores;
+}
+
+function getPaceStatus(){
+  const rd = getRoadmapDay();
+  const expectedDay = Math.min(rd, TOTAL_DAYS);
+  const loggedDays = getTotalLogged();
+  const activeDays = (() => {
+    const start = parseDate(APP.settings.startDate), end = new Date(); end.setHours(0,0,0,0);
+    let count=0, d=new Date(start);
+    while(d<=end){
+      if(!APP.settings.offDays.includes(getDayName(d))) count++;
+      d.setDate(d.getDate()+1);
+    }
+    return count;
+  })();
+  const diff = loggedDays - activeDays;
+  if(diff >= 0) return {status:"ahead", diff: Math.abs(diff), text:`You are ${Math.abs(diff)} day(s) ahead! 🚀`};
+  if(diff >= -2) return {status:"on-track", diff: Math.abs(diff), text:"You are on track! Keep going 💪"};
+  return {status:"behind", diff: Math.abs(diff), text:`You are ${Math.abs(diff)} day(s) behind schedule ⚠️`};
+}
+
+/* ==================== FEEDBACK ==================== */
+function generateFeedback(){
+  const msgs=[];
+  const recent7 = getRecentScores(7);
+  const recent3 = getRecentScores(3);
+  const streak = getStreak();
+  const pace = getPaceStatus();
+
+  // GOOD
+  const consec3Good = recent3.every(s=>s.score!==null&&s.score>=70);
+  if(consec3Good) msgs.push({type:'good',text:'Great consistency! 3+ consecutive days with scores above 70. Keep this momentum!'});
+
+  if(streak>=7) msgs.push({type:'good',text:`One week streak! 🔥 ${streak} days in a row — incredible discipline!`});
+  else if(streak>=3) msgs.push({type:'good',text:`${streak}-day streak! You are building a solid habit.`});
+
+  const todayLog = APP.logs[today()];
+  if(todayLog && todayLog.hoursStudied >= 3) msgs.push({type:'good',text:'Strong study session — 3+ hours today!'});
+
+  const allRatings = {};
+  Object.values(APP.logs).forEach(log=>{
+    Object.entries(log.understandingRatings||{}).forEach(([t,r])=>{
+      if(!allRatings[t]) allRatings[t]=[];
+      allRatings[t].push(r);
+    });
+  });
+  Object.entries(allRatings).forEach(([topic,ratings])=>{
+    const last = ratings[ratings.length-1];
+    if(last>=9) msgs.push({type:'good',text:`You have mastered "${topic}" with a rating of ${last}/10!`});
+  });
+
+  // Check phase completion
+  ROADMAP.forEach(ph=>{
+    const covered = new Set();
+    Object.values(APP.logs).forEach(log=>{(log.topicsCovered||[]).forEach(t=>{if(ph.topics.includes(t))covered.add(t);});});
+    if(covered.size===ph.topics.length) msgs.push({type:'good',text:`Phase ${ph.phase} complete! All "${ph.name}" topics covered!`});
+  });
+
+  // BAD
+  const last2 = getRecentScores(2);
+  const missed2 = last2.filter(s=>s.score===null).length;
+  if(missed2>=2) msgs.push({type:'bad',text:'You have missed 2 consecutive days. Try to get back on track today!'});
+
+  const low3 = recent3.filter(s=>s.score!==null && s.score<40);
+  if(low3.length>=3) msgs.push({type:'bad',text:'Your last 3 days had scores below 40. Focus on quality study sessions.'});
+
+  Object.entries(allRatings).forEach(([topic,ratings])=>{
+    const belowCount = ratings.filter(r=>r<5).length;
+    if(belowCount>=2) msgs.push({type:'bad',text:`"${topic}" is a weak spot — rated below 5 multiple times. Review it again.`});
+  });
+
+  if(pace.status==='behind' && pace.diff>=5) msgs.push({type:'bad',text:`You are ${pace.diff}+ days behind schedule. Consider increasing daily study time.`});
+
+  const last5 = getRecentScores(5);
+  const noPractice5 = last5.every(s=>{
+    if(s.score===null) return true;
+    const log=APP.logs[s.date];
+    return !log || (log.practiceActivities||[]).length===0;
+  });
+  if(noPractice5 && last5.some(s=>s.score!==null)) msgs.push({type:'bad',text:'You have not done hands-on practice for the last 5 days. Coding is essential!'});
+
+  return msgs;
+}
+
+/* ==================== NAVIGATION ==================== */
+let currentPage = 'dashboard';
+function navigateTo(page){
+  currentPage = page;
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+page).classList.add('active');
+  document.querySelectorAll('nav button').forEach((b,i)=>{
+    b.classList.toggle('active',['dashboard','log','performance','suggestions','settings'][i]===page);
+  });
+  renderPage(page);
+  window.scrollTo(0,0);
+}
+
+function renderPage(page){
+  switch(page){
+    case 'dashboard': renderDashboard(); break;
+    case 'log': renderLog(); break;
+    case 'performance': renderPerformance(); break;
+    case 'suggestions': renderSuggestions(); break;
+    case 'settings': renderSettings(); break;
+  }
+}
+
+/* ==================== DASHBOARD ==================== */
+function renderDashboard(){
+  const el = document.getElementById('page-dashboard');
+  const rd = Math.min(Math.max(getRoadmapDay(), 1), TOTAL_DAYS);
+  const info = getPhaseForDay(rd);
+  const phase = info.phase;
+  const dayInPhase = info.dayInPhase;
+  const phaseProgress = Math.round((dayInPhase / phase.days) * 100);
+  const overallProgress = Math.round(((rd - 1) / TOTAL_DAYS) * 100);
+  const todayTopics = getTopicsForDay(dayInPhase, phase);
+  const todayLog = APP.logs[today()];
+  const todayScore = todayLog ? todayLog.score : 0;
+  const streak = getStreak();
+  const status = todayLog ? 'Completed' : (APP.inProgress && APP.inProgress.includes(today()) ? 'In Progress' : 'Not Started');
+  const statusCls = status==='Completed'?'badge-green':status==='In Progress'?'badge-yellow':'badge-red';
+  const recent7 = getRecentScores(7);
+  const scoreLbl = scoreLabel(todayScore);
+  const scoreColor = getScoreColor(todayScore);
+  const feedback = generateFeedback();
+
+  let miniHeat = '';
+  recent7.forEach(s=>{
+    let cls='heat-gray', tip=s.day+': No data';
+    if(s.score!==null){
+      cls = s.score>=50?'heat-green':'heat-yellow';
+      tip = s.day+': Score '+s.score;
+    }
+    miniHeat += `<div class="mini-cell ${cls}" title="${tip}">${s.day}</div>`;
+  });
+
+  let feedbackHTML = '';
+  feedback.slice(0,5).forEach(f=>{
+    feedbackHTML += `<div class="feedback-item ${f.type==='good'?'feedback-good':'feedback-bad'}">${f.type==='good'?'✅':'⚠️'} ${f.text}</div>`;
+  });
+
+  el.innerHTML = `
+    <h1>⛓️ Learning Tracker</h1>
+    <p style="color:var(--text2);margin-bottom:16px">${formatDate(today())} — <strong>Day ${rd} of ${TOTAL_DAYS}</strong></p>
+
+    <div class="card" style="border-color:var(--accent)">
+      <div class="card-label">Current Phase</div>
+      <h2>Phase ${phase.phase} — ${phase.name}</h2>
+      <p class="progress-text">Day ${dayInPhase} of ${phase.days} (${phaseProgress}% complete) · ${phase.months}</p>
+      <div class="progress-wrap"><div class="progress-bar" style="width:${phaseProgress}%"></div></div>
+      <p class="progress-text" style="margin-top:8px">Overall: ${overallProgress}% of roadmap</p>
+      <div class="progress-wrap"><div class="progress-bar" style="width:${overallProgress}%;background:linear-gradient(90deg,var(--accent),var(--green))"></div></div>
+    </div>
+
+    <div class="card-row">
+      <div class="card">
+        <div class="card-label">📋 Daily Target</div>
+        <div style="margin-top:8px">${todayTopics.map(t=>`<span class="badge badge-purple" style="margin:2px">${t}</span>`).join(' ')}</div>
+      </div>
+      <div class="card">
+        <div class="card-label">Today's Status</div>
+        <span class="badge ${statusCls}" style="font-size:1rem;margin-top:8px;display:inline-block">${status==='Completed'?'✅':'⏳'} ${status}</span>
+      </div>
+    </div>
+
+    <div class="card-row">
+      <div class="card" style="text-align:center">
+        <div class="card-label">🔥 Streak</div>
+        <div class="streak-display" style="justify-content:center;margin-top:8px">
+          ${streak > 0 ? '🔥'.repeat(Math.min(streak,5)) : '—'}
+          <span>${streak} day${streak!==1?'s':''}</span>
+        </div>
+      </div>
+      <div class="card" style="text-align:center">
+        <div class="card-label">Daily Score</div>
+        <div class="score-ring" style="border:4px solid ${scoreColor};width:80px;height:80px;font-size:1.5rem;margin-top:8px">${todayScore}</div>
+        <span class="badge ${scoreLbl.cls}">${scoreLbl.label}</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-label">📅 Last 7 Days</div>
+      <div class="mini-heatmap" style="margin-top:8px">${miniHeat}</div>
+    </div>
+
+    ${feedbackHTML?`<div class="card"><div class="card-label">📣 Feedback</div><div style="margin-top:8px">${feedbackHTML}</div></div>`:''}
+
+    <button class="btn btn-primary btn-block btn-lg" onclick="navigateTo('log')" style="margin-top:8px">
+      📝 Log Today's Session
+    </button>
+  `;
+}
+
+/* ==================== DAILY LOG ==================== */
+function renderLog(){
+  const el = document.getElementById('page-log');
+  const rd = Math.min(Math.max(getRoadmapDay(), 1), TOTAL_DAYS);
+  const info = getPhaseForDay(rd);
+  const phase = info.phase;
+  const dayInPhase = info.dayInPhase;
+  const todayTopics = getTopicsForDay(dayInPhase, phase);
+  const existingLog = APP.logs[today()];
+
+  // Mark in progress
+  if(!APP.inProgress) APP.inProgress = [];
+  if(!APP.inProgress.includes(today()) && !existingLog){
+    APP.inProgress.push(today());
+    saveData(APP);
+  }
+
+  // Gather adjacent phase topics
+  const phaseIdx = ROADMAP.findIndex(p=>p.phase===phase.phase);
+  const prevPhase = phaseIdx > 0 ? ROADMAP[phaseIdx-1] : null;
+  const nextPhase = phaseIdx < ROADMAP.length-1 ? ROADMAP[phaseIdx+1] : null;
+
+  function topicCheckboxes(topics, recommended, existingTopics){
+    return topics.map(t=>{
+      const checked = existingTopics ? existingTopics.includes(t) : recommended.includes(t);
+      return `<label class="check-item ${checked?'checked':''}" onclick="toggleCheckItem(this)">
+        <input type="checkbox" name="topic" value="${t}" ${checked?'checked':''} onchange="updateUnderstandingSliders()"> ${t}
+      </label>`;
+    }).join('');
+  }
+
+  const practiceHTML = PRACTICE_ACTIVITIES.map(a=>{
+    const checked = existingLog && (existingLog.practiceActivities||[]).includes(a);
+    return `<label class="check-item ${checked?'checked':''}" onclick="toggleCheckItem(this)">
+      <input type="checkbox" name="practice" value="${a}" ${checked?'checked':''}> ${a}
+    </label>`;
+  }).join('');
+
+  const challengeHTML = CHALLENGES_LIST.map(c=>{
+    const checked = existingLog && (existingLog.challenges||[]).includes(c);
+    return `<label class="check-item ${checked?'checked':''}" onclick="toggleCheckItem(this)">
+      <input type="checkbox" name="challenge" value="${c}" ${checked?'checked':''} onchange="handleChallengeChange(this)"> ${c}
+    </label>`;
+  }).join('');
+
+  const moodHTML = MOODS.map(m=>{
+    const sel = existingLog && existingLog.mood === m.key;
+    return `<button type="button" class="mood-btn ${sel?'selected':''}" data-mood="${m.key}" onclick="selectMood(this)" title="${m.label}">${m.emoji}</button>`;
+  }).join('');
+
+  el.innerHTML = `
+    <h1>📝 Daily Log</h1>
+    <p style="color:var(--text2);margin-bottom:20px">${formatDate(today())} — Phase ${phase.phase}: ${phase.name}</p>
+
+    <form id="log-form" onsubmit="submitLog(event)">
+      <div class="card">
+        <div class="form-group">
+          <label class="form-label">⏱️ Hours Studied</label>
+          <input type="number" class="form-input" id="log-hours" min="0" max="12" step="0.5" value="${existingLog?existingLog.hoursStudied:''}" placeholder="0" required>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="form-group">
+          <label class="form-label">📚 Topics Covered — Current Phase (${phase.name})</label>
+          <p style="color:var(--text2);font-size:.8rem;margin-bottom:8px">Today's recommended: ${todayTopics.join(', ')}</p>
+          <div class="check-grid">${topicCheckboxes(phase.topics, todayTopics, existingLog?(existingLog.topicsCovered||[]):null)}</div>
+        </div>
+        ${prevPhase?`<div class="form-group"><label class="form-label" style="color:var(--text2)">Previous: ${prevPhase.name}</label><div class="check-grid">${topicCheckboxes(prevPhase.topics, [], existingLog?(existingLog.topicsCovered||[]):null)}</div></div>`:''}
+        ${nextPhase?`<div class="form-group"><label class="form-label" style="color:var(--text2)">Next: ${nextPhase.name}</label><div class="check-grid">${topicCheckboxes(nextPhase.topics, [], existingLog?(existingLog.topicsCovered||[]):null)}</div></div>`:''}
+      </div>
+
+      <div class="card" id="understanding-card">
+        <div class="form-group">
+          <label class="form-label">🧠 Self-Rated Understanding (1–10)</label>
+          <div id="understanding-sliders"></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="form-group">
+          <label class="form-label">🛠️ Hands-on Practice</label>
+          <div class="check-grid">${practiceHTML}</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="form-group">
+          <label class="form-label">😊 Mood / Energy</label>
+          <div class="mood-grid">${moodHTML}</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="form-group">
+          <label class="form-label">📝 Notes</label>
+          <textarea class="form-textarea" id="log-notes" placeholder="What did you learn today?">${existingLog?existingLog.notes||'':''}</textarea>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="form-group">
+          <label class="form-label">🚧 Challenges Faced Today</label>
+          <div class="check-grid">${challengeHTML}</div>
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-block btn-lg">✅ Submit Log</button>
+    </form>
+  `;
+
+  updateUnderstandingSliders();
+}
+
+function toggleCheckItem(label){
+  const cb = label.querySelector('input[type=checkbox]');
+  setTimeout(()=>{ label.classList.toggle('checked', cb.checked); }, 0);
+}
+
+function selectMood(btn){
+  document.querySelectorAll('.mood-btn').forEach(b=>b.classList.remove('selected'));
+  btn.classList.add('selected');
+}
+
+function handleChallengeChange(cb){
+  if(cb.value === 'No challenges' && cb.checked){
+    document.querySelectorAll('input[name=challenge]').forEach(c=>{
+      if(c.value !== 'No challenges'){c.checked=false;c.closest('.check-item').classList.remove('checked');}
+    });
+  } else if(cb.value !== 'No challenges' && cb.checked){
+    const noChal = document.querySelector('input[name=challenge][value="No challenges"]');
+    if(noChal){noChal.checked=false;noChal.closest('.check-item').classList.remove('checked');}
+  }
+}
+
+function updateUnderstandingSliders(){
+  const container = document.getElementById('understanding-sliders');
+  if(!container) return;
+  const checked = Array.from(document.querySelectorAll('input[name=topic]:checked')).map(c=>c.value);
+  const existingLog = APP.logs[today()];
+  const existingRatings = existingLog ? existingLog.understandingRatings || {} : {};
+  if(checked.length === 0){
+    container.innerHTML = '<p style="color:var(--text2);font-size:.85rem">Check topics above to rate your understanding.</p>';
+    return;
+  }
+  container.innerHTML = checked.map(t=>{
+    const val = existingRatings[t] || 5;
+    return `<div class="understanding-row">
+      <label>${t}</label>
+      <input type="range" min="1" max="10" value="${val}" data-topic="${t}" oninput="this.nextElementSibling.textContent=this.value">
+      <span class="val">${val}</span>
+    </div>`;
+  }).join('');
+}
+
+function submitLog(e){
+  e.preventDefault();
+  const hours = parseFloat(document.getElementById('log-hours').value) || 0;
+  const topics = Array.from(document.querySelectorAll('input[name=topic]:checked')).map(c=>c.value);
+  const practice = Array.from(document.querySelectorAll('input[name=practice]:checked')).map(c=>c.value);
+  const challenges = Array.from(document.querySelectorAll('input[name=challenge]:checked')).map(c=>c.value);
+  const moodBtn = document.querySelector('.mood-btn.selected');
+  const mood = moodBtn ? moodBtn.dataset.mood : 'neutral';
+  const notes = document.getElementById('log-notes').value;
+  const ratings = {};
+  document.querySelectorAll('#understanding-sliders input[type=range]').forEach(s=>{
+    ratings[s.dataset.topic] = parseInt(s.value);
+  });
+
+  const log = {
+    hoursStudied: hours,
+    topicsCovered: topics,
+    practiceActivities: practice,
+    understandingRatings: ratings,
+    mood: mood,
+    notes: notes,
+    challenges: challenges,
+    score: 0,
+    verdict: ''
+  };
+  log.score = calculateScore(log, APP.settings.dailyGoalHours);
+  const sl = scoreLabel(log.score);
+  log.verdict = sl.label + ' day';
+
+  APP.logs[today()] = log;
+  APP.inProgress = (APP.inProgress||[]).filter(d=>d!==today());
+  saveData(APP);
+  showScoreModal(log);
+}
+
+function showScoreModal(log){
+  const sl = scoreLabel(log.score);
+  const color = getScoreColor(log.score);
+  const goalH = APP.settings.dailyGoalHours;
+  const hourPts = Math.min(Math.round((log.hoursStudied / goalH) * 40), 40);
+  const rd = Math.min(Math.max(getRoadmapDay(), 1), TOTAL_DAYS);
+  const info = getPhaseForDay(rd);
+  const recTopics = getTopicsForDay(info.dayInPhase, info.phase);
+  const coveredRec = recTopics.filter(t=>(log.topicsCovered||[]).includes(t)).length;
+  const topicPts = recTopics.length > 0 ? Math.min(Math.round((coveredRec / recTopics.length) * 30), 30) : ((log.topicsCovered||[]).length > 0 ? 30 : 0);
+  const ratings = Object.values(log.understandingRatings || {});
+  const avgR = ratings.length > 0 ? (ratings.reduce((a,b)=>a+b,0)/ratings.length).toFixed(1) : '0';
+  const understandPts = Math.round((parseFloat(avgR) / 10) * 20);
+  const practicePts = Math.min((log.practiceActivities||[]).length * 2, 10);
+
+  const feedback = generateFeedback();
+  let fbHTML = '';
+  feedback.slice(0,3).forEach(f=>{
+    fbHTML += `<div class="feedback-item ${f.type==='good'?'feedback-good':'feedback-bad'}">${f.type==='good'?'✅':'⚠️'} ${f.text}</div>`;
+  });
+
+  const modal = document.getElementById('modal');
+  modal.innerHTML = `
+    <div class="modal-content">
+      <h2 style="text-align:center">📊 Session Analysis</h2>
+      <div class="score-ring" style="border:4px solid ${color};margin:16px auto">${log.score}</div>
+      <p style="text-align:center;margin-bottom:20px"><span class="badge ${sl.cls}" style="font-size:1rem">${sl.label}</span></p>
+
+      <h3>Score Breakdown</h3>
+      <div style="margin-bottom:16px">
+        <div style="display:flex;justify-content:space-between;margin:6px 0;font-size:.9rem">
+          <span>⏱️ Hours (${log.hoursStudied}h / ${goalH}h goal)</span><strong>${hourPts}/40</strong>
+        </div>
+        <div class="progress-wrap" style="height:8px"><div class="progress-bar" style="width:${(hourPts/40)*100}%"></div></div>
+
+        <div style="display:flex;justify-content:space-between;margin:6px 0;font-size:.9rem">
+          <span>📚 Topics (${coveredRec}/${recTopics.length} recommended)</span><strong>${topicPts}/30</strong>
+        </div>
+        <div class="progress-wrap" style="height:8px"><div class="progress-bar" style="width:${(topicPts/30)*100}%"></div></div>
+
+        <div style="display:flex;justify-content:space-between;margin:6px 0;font-size:.9rem">
+          <span>🧠 Understanding (avg ${avgR}/10)</span><strong>${understandPts}/20</strong>
+        </div>
+        <div class="progress-wrap" style="height:8px"><div class="progress-bar" style="width:${(understandPts/20)*100}%"></div></div>
+
+        <div style="display:flex;justify-content:space-between;margin:6px 0;font-size:.9rem">
+          <span>🛠️ Practice (${(log.practiceActivities||[]).length} activities)</span><strong>${practicePts}/10</strong>
+        </div>
+        <div class="progress-wrap" style="height:8px"><div class="progress-bar" style="width:${(practicePts/10)*100}%"></div></div>
+      </div>
+
+      ${fbHTML?`<h3>Feedback</h3>${fbHTML}`:''}
+
+      <button class="btn btn-primary btn-block" onclick="hideModal();navigateTo('dashboard')" style="margin-top:16px">🏠 Back to Dashboard</button>
+    </div>
+  `;
+  modal.classList.add('show');
+}
+
+function showModal(html){
+  const modal = document.getElementById('modal');
+  modal.innerHTML = `<div class="modal-content">${html}<button class="btn btn-outline btn-block" onclick="hideModal()" style="margin-top:16px">Close</button></div>`;
+  modal.classList.add('show');
+}
+function hideModal(){document.getElementById('modal').classList.remove('show');}
+
+/* ==================== PERFORMANCE ==================== */
+function renderPerformance(){
+  const el = document.getElementById('page-performance');
+  const rd = Math.min(Math.max(getRoadmapDay(), 1), TOTAL_DAYS);
+  const overallPct = Math.round(((rd - 1) / TOTAL_DAYS) * 100);
+  const totalLogged = getTotalLogged();
+  const totalMissed = getTotalMissed();
+  const streak = getStreak();
+  const longest = getLongestStreak();
+  const pace = getPaceStatus();
+
+  // Projected finish
+  const avgPerDay = totalLogged > 0 ? totalLogged / Math.max(rd, 1) : 0;
+  const remainingDays = TOTAL_DAYS - rd + 1;
+  const projectedDaysLeft = avgPerDay > 0 ? Math.ceil(remainingDays / avgPerDay) : remainingDays;
+  const projFinish = new Date();
+  projFinish.setDate(projFinish.getDate() + projectedDaysLeft);
+  const projFinishStr = projFinish.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+
+  // Weekly bar chart
+  const recent7 = getRecentScores(7);
+  const maxScore = 100;
+  let barHTML = '';
+  recent7.forEach(s=>{
+    const h = s.score !== null ? Math.max((s.score / maxScore) * 140, 4) : 4;
+    const c = s.score !== null ? getScoreColor(s.score) : 'var(--border)';
+    barHTML += `<div class="bar-col">
+      <div class="bar-value">${s.score!==null?s.score:'-'}</div>
+      <div class="bar" style="height:${h}px;background:${c}"></div>
+      <div class="bar-label">${s.day}</div>
+    </div>`;
+  });
+
+  // Monthly heatmap
+  const now = new Date();
+  const firstOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+  const daysInMonth = new Date(now.getFullYear(), now.getMonth()+1, 0).getDate();
+  const startDay = firstOfMonth.getDay(); // 0=Sun
+  let heatCells = '';
+  const totalCells = Math.ceil((daysInMonth + startDay) / 7) * 7;
+  for(let i=0;i<totalCells;i++){
+    const dayNum = i - startDay + 1;
+    if(dayNum < 1 || dayNum > daysInMonth){
+      heatCells += `<div class="heatmap-cell heat-empty"></div>`;
+    } else {
+      const d = new Date(now.getFullYear(), now.getMonth(), dayNum);
+      const ds = getDateStr(d);
+      const isOffDay = APP.settings.offDays.includes(getDayName(d));
+      const isFuture = d > now;
+      let cls='heat-gray', tip=`${dayNum}: No data`;
+      if(isFuture){cls='heat-empty';tip=`${dayNum}: Future`;}
+      else if(APP.logs[ds]){
+        const sc = APP.logs[ds].score;
+        cls = sc>=50?'heat-green':'heat-yellow';
+        tip = `${dayNum}: Score ${sc}`;
+      } else if(isOffDay){
+        cls='heat-empty';tip=`${dayNum}: Off day`;
+      } else {
+        cls='heat-red';tip=`${dayNum}: Missed`;
+      }
+      heatCells += `<div class="heatmap-cell ${cls}" data-tip="${tip}"></div>`;
+    }
+  }
+  const heatCols = 7;
+  const heatRows = Math.ceil(totalCells / 7);
+
+  // Strong / Weak areas
+  const topicRatings = {};
+  Object.values(APP.logs).forEach(log=>{
+    Object.entries(log.understandingRatings||{}).forEach(([t,r])=>{
+      if(!topicRatings[t]) topicRatings[t]=[];
+      topicRatings[t].push(r);
+    });
+  });
+  const strong = [], weak = [];
+  Object.entries(topicRatings).forEach(([t,rs])=>{
+    const avg = rs.reduce((a,b)=>a+b,0)/rs.length;
+    if(avg>=8) strong.push({topic:t,avg:avg.toFixed(1)});
+    if(avg<=5) weak.push({topic:t,avg:avg.toFixed(1)});
+  });
+
+  // Phase completion
+  let phaseCompHTML = '';
+  ROADMAP.forEach(ph=>{
+    const covered = new Set();
+    Object.values(APP.logs).forEach(log=>{(log.topicsCovered||[]).forEach(t=>{if(ph.topics.includes(t))covered.add(t);});});
+    const pct = Math.round((covered.size / ph.topics.length) * 100);
+    phaseCompHTML += `<div style="margin-bottom:8px">
+      <div style="display:flex;justify-content:space-between;font-size:.85rem"><span>P${ph.phase}: ${ph.name}</span><span>${pct}%</span></div>
+      <div class="progress-wrap" style="height:8px"><div class="progress-bar" style="width:${pct}%"></div></div>
+    </div>`;
+  });
+
+  // Verdict
+  const allScores = Object.values(APP.logs).map(l=>l.score);
+  const avgScore = allScores.length > 0 ? allScores.reduce((a,b)=>a+b,0)/allScores.length : 0;
+  let verdict, verdictColor, verdictText;
+  if(avgScore >= 75 && pace.status !== 'behind'){
+    verdict='Excellent';verdictColor='var(--green)';verdictText='Outstanding progress! You are mastering the material consistently.';
+  } else if(avgScore >= 55 && (pace.status==='on-track'||pace.status==='ahead')){
+    verdict='On Track';verdictColor='var(--accent)';verdictText='Solid progress. Keep up the daily consistency!';
+  } else if(avgScore >= 35 || (pace.status==='behind' && pace.diff < 7)){
+    verdict='Slipping';verdictColor='var(--yellow)';verdictText='You are falling behind. Increase study hours and focus on weak areas.';
+  } else {
+    verdict='Critical';verdictColor='var(--red)';verdictText='Significant gaps in your learning. Consider a revised schedule.';
+  }
+
+  const feedback = generateFeedback();
+  let fbHTML = '';
+  feedback.forEach(f=>{
+    fbHTML += `<div class="feedback-item ${f.type==='good'?'feedback-good':'feedback-bad'}">${f.type==='good'?'✅':'⚠️'} ${f.text}</div>`;
+  });
+
+  el.innerHTML = `
+    <h1>📈 Performance Analysis</h1>
+
+    <div class="verdict-banner card" style="border-color:${verdictColor}">
+      <h2 style="color:${verdictColor};font-size:1.6rem">${verdict}</h2>
+      <p>${verdictText}</p>
+    </div>
+
+    <div class="card-row">
+      <div class="card" style="text-align:center">
+        <div class="card-label">Overall Progress</div>
+        <div class="card-value" style="color:var(--accent)">${overallPct}%</div>
+        <div class="progress-wrap"><div class="progress-bar" style="width:${overallPct}%"></div></div>
+        <p style="font-size:.8rem;color:var(--text2);margin-top:4px">Projected finish: ${projFinishStr}</p>
+      </div>
+      <div class="card" style="text-align:center">
+        <div class="card-label">Pace</div>
+        <div class="card-value" style="color:${pace.status==='behind'?'var(--red)':pace.status==='ahead'?'var(--green)':'var(--accent)'};font-size:1.2rem;margin-top:8px">${pace.text}</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-label">📊 Weekly Performance (Last 7 Days)</div>
+      <div class="bar-chart" style="margin-top:8px">${barHTML}</div>
+    </div>
+
+    <div class="card">
+      <div class="card-label">📅 Monthly Heatmap — ${now.toLocaleDateString('en-US',{month:'long',year:'numeric'})}</div>
+      <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;font-size:.7rem;color:var(--text2);margin:8px 0">
+        <div style="text-align:center">Su</div><div style="text-align:center">Mo</div><div style="text-align:center">Tu</div>
+        <div style="text-align:center">We</div><div style="text-align:center">Th</div><div style="text-align:center">Fr</div><div style="text-align:center">Sa</div>
+      </div>
+      <div class="heatmap-grid" style="grid-template-columns:repeat(${heatCols},1fr)">${heatCells}</div>
+      <div style="display:flex;gap:12px;margin-top:8px;font-size:.75rem;color:var(--text2)">
+        <span><span class="heatmap-cell heat-green" style="display:inline-block;width:12px;height:12px;border-radius:2px;vertical-align:middle"></span> Good</span>
+        <span><span class="heatmap-cell heat-yellow" style="display:inline-block;width:12px;height:12px;border-radius:2px;vertical-align:middle"></span> Low</span>
+        <span><span class="heatmap-cell heat-red" style="display:inline-block;width:12px;height:12px;border-radius:2px;vertical-align:middle"></span> Missed</span>
+        <span><span class="heatmap-cell heat-empty" style="display:inline-block;width:12px;height:12px;border-radius:2px;vertical-align:middle"></span> Off/Future</span>
+      </div>
+    </div>
+
+    <div class="card-row-3">
+      <div class="card" style="text-align:center">
+        <div class="card-label">🔥 Current Streak</div>
+        <div class="card-value">${streak}</div>
+      </div>
+      <div class="card" style="text-align:center">
+        <div class="card-label">🏆 Longest Streak</div>
+        <div class="card-value">${longest}</div>
+      </div>
+      <div class="card" style="text-align:center">
+        <div class="card-label">📊 Avg Score</div>
+        <div class="card-value">${Math.round(avgScore)}</div>
+      </div>
+    </div>
+
+    <div class="card-row">
+      <div class="card" style="text-align:center">
+        <div class="card-label">✅ Total Logged</div>
+        <div class="card-value" style="color:var(--green)">${totalLogged}</div>
+      </div>
+      <div class="card" style="text-align:center">
+        <div class="card-label">❌ Total Missed</div>
+        <div class="card-value" style="color:var(--red)">${totalMissed}</div>
+      </div>
+    </div>
+
+    <div class="card-row">
+      <div class="card">
+        <div class="card-label">💪 Strong Areas (avg ≥ 8)</div>
+        ${strong.length ? strong.map(s=>`<div style="display:flex;justify-content:space-between;padding:4px 0;font-size:.9rem"><span>${s.topic}</span><span class="badge badge-green">${s.avg}</span></div>`).join('') : '<p style="color:var(--text2);font-size:.85rem">No strong areas yet — keep learning!</p>'}
+      </div>
+      <div class="card">
+        <div class="card-label">⚠️ Weak Areas (avg ≤ 5)</div>
+        ${weak.length ? weak.map(w=>`<div style="display:flex;justify-content:space-between;padding:4px 0;font-size:.9rem"><span>${w.topic}</span><span class="badge badge-red">${w.avg}</span></div>`).join('') : '<p style="color:var(--text2);font-size:.85rem">No weak areas — great!</p>'}
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-label">📦 Phase Completion</div>
+      <div style="margin-top:8px">${phaseCompHTML}</div>
+    </div>
+
+    ${fbHTML?`<div class="card"><div class="card-label">📣 All Feedback</div><div style="margin-top:8px">${fbHTML}</div></div>`:''}
+  `;
+}
+
+/* ==================== SUGGESTIONS ==================== */
+function renderSuggestions(){
+  const el = document.getElementById('page-suggestions');
+  const rd = Math.min(Math.max(getRoadmapDay(), 1), TOTAL_DAYS);
+  const info = getPhaseForDay(rd);
+  const phase = info.phase;
+  const dayInPhase = info.dayInPhase;
+  const todayTopics = getTopicsForDay(dayInPhase, phase);
+  const pace = getPaceStatus();
+  const goalH = APP.settings.dailyGoalHours;
+
+  // Minimum hours needed
+  let minHours = goalH;
+  let catchupMsg = '';
+  if(pace.status === 'behind'){
+    const extra = Math.ceil(pace.diff * goalH / 7);
+    minHours = goalH + extra * 0.5;
+    catchupMsg = `<div class="feedback-item feedback-warn">⚡ <strong>Catch-Up Plan:</strong> You are ${pace.diff} day(s) behind. Study at least <strong>${minHours.toFixed(1)} hours/day</strong> this week (${goalH}h base + ${(minHours-goalH).toFixed(1)}h extra) to close the gap. Focus on completing recommended topics before moving on.</div>`;
+  } else if(pace.status === 'ahead'){
+    catchupMsg = `<div class="feedback-item feedback-good">🚀 <strong>Ahead of Schedule!</strong> Great work! Use this extra time for deeper practice — try building a mini-project or revisiting weak areas.</div>`;
+  } else {
+    catchupMsg = `<div class="feedback-item feedback-good">💪 <strong>On Track!</strong> Keep your daily ${goalH}-hour sessions consistent. You are doing well!</div>`;
+  }
+
+  // Interview question of the day
+  const dayOfYear = Math.floor((new Date() - new Date(new Date().getFullYear(),0,0)) / 86400000);
+  const qIdx = dayOfYear % INTERVIEW_QUESTIONS.length;
+  const iq = INTERVIEW_QUESTIONS[qIdx];
+
+  // Resources
+  const res = RESOURCES[phase.phase] || [];
+  const resHTML = res.map(r=>`<li>${r}</li>`).join('');
+
+  // Phase timeline
+  let timelineHTML = '';
+  let cumDays = 0;
+  ROADMAP.forEach(ph=>{
+    const phStart = cumDays + 1;
+    const phEnd = cumDays + ph.days;
+    let status = 'future';
+    if(rd > phEnd) status = 'done';
+    else if(rd >= phStart) status = 'active';
+    timelineHTML += `<div class="phase-row ${status==='active'?'current':''}">
+      <div class="phase-num ${status}">${status==='done'?'✓':ph.phase}</div>
+      <div style="flex:1"><strong>${ph.name}</strong><br><span style="font-size:.8rem;color:var(--text2)">${ph.months} · ${ph.days} days · ${ph.topics.length} topics</span></div>
+      <span class="badge ${status==='done'?'badge-green':status==='active'?'badge-purple':'badge-yellow'}">${status==='done'?'Done':status==='active'?'Active':'Upcoming'}</span>
+    </div>`;
+    cumDays += ph.days;
+  });
+
+  el.innerHTML = `
+    <h1>💡 Daily Suggestions</h1>
+    <p style="color:var(--text2);margin-bottom:20px">${formatDate(today())} — Day ${rd} of ${TOTAL_DAYS}</p>
+
+    <div class="card" style="border-color:var(--accent)">
+      <div class="card-label">📋 Today's Recommended Topics</div>
+      <div style="margin-top:8px">${todayTopics.map(t=>`<span class="badge badge-purple" style="margin:4px;font-size:.95rem;padding:6px 14px">${t}</span>`).join('')}</div>
+      <p style="color:var(--text2);font-size:.85rem;margin-top:12px">Phase ${phase.phase}: ${phase.name} — Day ${dayInPhase} of ${phase.days}</p>
+    </div>
+
+    <div class="card">
+      <div class="card-label">⏱️ Minimum Hours Today</div>
+      <div class="card-value" style="margin-top:8px">${minHours.toFixed(1)}h</div>
+      <p style="font-size:.8rem;color:var(--text2);margin-top:4px">Base goal: ${goalH}h/day${pace.status==='behind'?` + catch-up buffer`:''}</p>
+    </div>
+
+    ${catchupMsg}
+
+    <div class="card">
+      <div class="card-label">🎯 Interview Question of the Day</div>
+      <p style="margin-top:8px;font-size:1rem;line-height:1.6">${iq}</p>
+      <p style="color:var(--text2);font-size:.8rem;margin-top:8px">Question ${qIdx + 1} of ${INTERVIEW_QUESTIONS.length} — changes daily</p>
+    </div>
+
+    <div class="card">
+      <div class="card-label">📚 Recommended Resources — ${phase.name}</div>
+      <ul class="resource-list" style="margin-top:8px">${resHTML}</ul>
+    </div>
+
+    <div class="card">
+      <div class="card-label">🗺️ Roadmap Timeline</div>
+      <div class="phase-timeline" style="margin-top:8px">${timelineHTML}</div>
+    </div>
+  `;
+}
+
+/* ==================== SETTINGS ==================== */
+function renderSettings(){
+  const el = document.getElementById('page-settings');
+  const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const dayChecks = days.map(d=>{
+    const active = APP.settings.offDays.includes(d);
+    return `<span class="day-check ${active?'active':''}" onclick="toggleOffDay(this,'${d}')">${d.slice(0,3)}</span>`;
+  }).join('');
+
+  el.innerHTML = `
+    <h1>⚙️ Settings</h1>
+
+    <div class="card">
+      <div class="setting-row">
+        <div>
+          <div class="form-label" style="margin-bottom:2px">📅 Roadmap Start Date</div>
+          <p style="font-size:.8rem;color:var(--text2)">When did you start (or plan to start)?</p>
+        </div>
+        <input type="date" class="form-input" style="width:auto" id="set-startdate" value="${APP.settings.startDate}" onchange="updateSetting('startDate',this.value)">
+      </div>
+
+      <div class="setting-row">
+        <div>
+          <div class="form-label" style="margin-bottom:2px">⏱️ Daily Study Goal (hours)</div>
+          <p style="font-size:.8rem;color:var(--text2)">Used for scoring (default: 2)</p>
+        </div>
+        <input type="number" class="form-input" style="width:80px" id="set-goalhours" min="0.5" max="12" step="0.5" value="${APP.settings.dailyGoalHours}" onchange="updateSetting('dailyGoalHours',parseFloat(this.value))">
+      </div>
+
+      <div class="setting-row" style="flex-direction:column;align-items:flex-start;gap:8px">
+        <div>
+          <div class="form-label" style="margin-bottom:2px">📆 Weekly Off Days</div>
+          <p style="font-size:.8rem;color:var(--text2)">Select days you don't plan to study</p>
+        </div>
+        <div class="day-checks">${dayChecks}</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-label">📤 Data Management</div>
+      <div style="display:flex;gap:12px;margin-top:12px;flex-wrap:wrap">
+        <button class="btn btn-outline" onclick="exportData()">📥 Export as JSON</button>
+        <button class="btn btn-outline" onclick="importDataPrompt()">📤 Import JSON</button>
+        <button class="btn btn-danger" onclick="confirmReset()">🗑️ Reset All Data</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-label">ℹ️ About</div>
+      <p style="font-size:.9rem;color:var(--text2);margin-top:8px;line-height:1.6">
+        Smart Contract Developer Learning Tracker — A 365-day structured roadmap covering 8 phases from programming foundations to job hunting.
+        All data is stored locally in your browser. No external services or APIs are used.
+      </p>
+    </div>
+  `;
+}
+
+function updateSetting(key, value){
+  APP.settings[key] = value;
+  saveData(APP);
+}
+
+function toggleOffDay(el, day){
+  const idx = APP.settings.offDays.indexOf(day);
+  if(idx >= 0) APP.settings.offDays.splice(idx, 1);
+  else APP.settings.offDays.push(day);
+  el.classList.toggle('active');
+  saveData(APP);
+}
+
+function exportData(){
+  const blob = new Blob([JSON.stringify(APP, null, 2)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `blockchain_tracker_${today()}.json`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+function importDataPrompt(){
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = '.json';
+  input.onchange = function(e){
+    const file = e.target.files[0];
+    if(!file) return;
+    const reader = new FileReader();
+    reader.onload = function(ev){
+      try{
+        const data = JSON.parse(ev.target.result);
+        if(data.settings && data.logs){
+          APP = data;
+          saveData(APP);
+          navigateTo('settings');
+          showModal('<h2>✅ Import Successful</h2><p>Your data has been imported.</p>');
+        } else {
+          showModal('<h2>❌ Invalid File</h2><p>The file does not have the expected format.</p>');
+        }
+      }catch(err){
+        showModal('<h2>❌ Error</h2><p>Could not parse the file. Make sure it is valid JSON.</p>');
+      }
+    };
+    reader.readAsText(file);
+  };
+  input.click();
+}
+
+function confirmReset(){
+  showModal(`
+    <h2>🗑️ Reset All Data?</h2>
+    <p style="color:var(--text2);margin:12px 0">This will permanently delete all your logs, settings, and progress. This action cannot be undone.</p>
+    <div style="display:flex;gap:12px;margin-top:16px">
+      <button class="btn btn-danger" style="flex:1" onclick="resetData()">Yes, Reset Everything</button>
+      <button class="btn btn-outline" style="flex:1" onclick="hideModal()">Cancel</button>
+    </div>
+  `);
+}
+
+function resetData(){
+  APP = defaultData();
+  saveData(APP);
+  hideModal();
+  navigateTo('settings');
+}
+
+/* ==================== INIT ==================== */
+function init(){
+  APP = loadData();
+  if(!APP.settings) APP.settings = defaultData().settings;
+  if(!APP.logs) APP.logs = {};
+  if(!APP.inProgress) APP.inProgress = [];
+  saveData(APP);
+  renderDashboard();
+}
+
+init();
+</script>
+</body>
+</html>
