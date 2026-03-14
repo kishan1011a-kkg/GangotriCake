@@ -1,0 +1,3017 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smart Contract Developer Learning Tracker</title>
+<style>
+/* ══════════════════════════════════════════════
+   CSS VARIABLES
+══════════════════════════════════════════════ */
+:root {
+  --bg-primary: #0f1117;
+  --bg-secondary: #1a1d26;
+  --bg-card: #21242d;
+  --bg-hover: #2a2e3a;
+  --accent: #7C3AED;
+  --accent-light: #9061f9;
+  --success: #10B981;
+  --danger: #EF4444;
+  --warning: #F59E0B;
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --border: #2d3748;
+  --border-light: #3d4556;
+}
+
+/* ══════════════════════════════════════════════
+   RESET & BASE
+══════════════════════════════════════════════ */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  min-height: 100vh;
+  line-height: 1.6;
+}
+
+/* ══════════════════════════════════════════════
+   NAVIGATION
+══════════════════════════════════════════════ */
+nav {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border);
+  padding: 0 1rem;
+}
+
+.nav-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 64px;
+}
+
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--accent);
+}
+
+.nav-logo svg {
+  width: 28px;
+  height: 28px;
+}
+
+.nav-links {
+  display: flex;
+  gap: 0.25rem;
+  list-style: none;
+}
+
+.nav-links a {
+  color: var(--text-secondary);
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+  color: var(--text-primary);
+  background: var(--bg-hover);
+}
+
+.nav-links a.active {
+  color: var(--accent);
+}
+
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  padding: 0.5rem;
+}
+
+.hamburger div {
+  width: 24px;
+  height: 2px;
+  background: var(--text-primary);
+  transition: all 0.3s ease;
+}
+
+/* ══════════════════════════════════════════════
+   MAIN LAYOUT
+══════════════════════════════════════════════ */
+main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 80px 1rem 2rem;
+  min-height: calc(100vh - 64px);
+}
+
+.page {
+  display: none;
+  animation: fadeIn 0.3s ease;
+}
+
+.page.active {
+  display: block;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ══════════════════════════════════════════════
+   CARDS
+══════════════════════════════════════════════ */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.card-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.card-subtitle {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin-top: 0.25rem;
+}
+
+/* ══════════════════════════════════════════════
+   GRID LAYOUTS
+══════════════════════════════════════════════ */
+.grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.grid-4 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+
+/* ══════════════════════════════════════════════
+   BUTTONS
+══════════════════════════════════════════════ */
+.btn {
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent-light);
+  transform: translateY(-2px);
+}
+
+.btn-success {
+  background: var(--success);
+  color: white;
+}
+
+.btn-success:hover {
+  background: #0ea371;
+}
+
+.btn-danger {
+  background: var(--danger);
+  color: white;
+}
+
+.btn-danger:hover {
+  background: #dc2626;
+}
+
+.btn-outline {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+}
+
+.btn-outline:hover {
+  background: var(--bg-hover);
+}
+
+.btn-lg {
+  padding: 1rem 2rem;
+  font-size: 1rem;
+}
+
+/* ══════════════════════════════════════════════
+   FORM ELEMENTS
+══════════════════════════════════════════════ */
+.form-group {
+  margin-bottom: 1.25rem;
+}
+
+.form-label {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin-bottom: 0.5rem;
+}
+
+.form-input,
+.form-select,
+.form-textarea {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text-primary);
+  font-size: 0.95rem;
+  transition: border-color 0.2s ease;
+}
+
+.form-input:focus,
+.form-select:focus,
+.form-textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.form-textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+/* ══════════════════════════════════════════════
+   PROGRESS BARS
+══════════════════════════════════════════════ */
+.progress-bar {
+  width: 100%;
+  height: 8px;
+  background: var(--bg-secondary);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 4px;
+  transition: width 0.5s ease;
+}
+
+.progress-fill.success {
+  background: var(--success);
+}
+
+.progress-fill.warning {
+  background: var(--warning);
+}
+
+.progress-fill.danger {
+  background: var(--danger);
+}
+
+/* ══════════════════════════════════════════════
+   BADGES & TAGS
+══════════════════════════════════════════════ */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 50px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.badge-success {
+  background: rgba(16, 185, 129, 0.15);
+  color: var(--success);
+}
+
+.badge-warning {
+  background: rgba(245, 158, 11, 0.15);
+  color: var(--warning);
+}
+
+.badge-danger {
+  background: rgba(239, 68, 68, 0.15);
+  color: var(--danger);
+}
+
+.badge-primary {
+  background: rgba(124, 58, 237, 0.15);
+  color: var(--accent);
+}
+
+/* ══════════════════════════════════════════════
+   DASHBOARD PAGE
+══════════════════════════════════════════════ */
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.date-info h1 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+}
+
+.date-info p {
+  color: var(--text-secondary);
+}
+
+.streak-display {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: var(--bg-card);
+  padding: 0.75rem 1.25rem;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+}
+
+.streak-fire {
+  font-size: 1.75rem;
+}
+
+.streak-count {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--warning);
+}
+
+.streak-label {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.stat-card {
+  text-align: center;
+  padding: 1.25rem;
+}
+
+.stat-value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.stat-label {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin-top: 0.25rem;
+}
+
+.phase-info {
+  margin-bottom: 1rem;
+}
+
+.phase-name {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.phase-dates {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.75rem;
+}
+
+.phase-progress-text {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Mini Heatmap */
+.mini-heatmap {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.heatmap-day {
+  width: 28px;
+  height: 28px;
+  border-radius: 4px;
+  background: var(--bg-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+
+.heatmap-day.logged {
+  background: var(--success);
+  color: white;
+}
+
+.heatmap-day.missed {
+  background: var(--bg-secondary);
+}
+
+.heatmap-day.today {
+  border: 2px solid var(--accent);
+}
+
+/* Today Status */
+.today-status {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.today-status.not-started {
+  background: rgba(100, 116, 139, 0.1);
+  border: 1px solid var(--text-muted);
+}
+
+.today-status.in-progress {
+  background: rgba(245, 158, 11, 0.1);
+  border: 1px solid var(--warning);
+}
+
+.today-status.completed {
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid var(--success);
+}
+
+.status-icon {
+  font-size: 1.5rem;
+}
+
+/* Daily Target */
+.target-topics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.topic-tag {
+  background: var(--bg-secondary);
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  border: 1px solid var(--border);
+}
+
+.topic-tag.covered {
+  background: rgba(16, 185, 129, 0.15);
+  border-color: var(--success);
+  color: var(--success);
+}
+
+/* Performance Score */
+.score-circle {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: conic-gradient(var(--accent) 0deg, var(--bg-secondary) 0deg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1rem;
+  position: relative;
+}
+
+.score-circle::before {
+  content: '';
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  background: var(--bg-card);
+  border-radius: 50%;
+}
+
+.score-value {
+  position: relative;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.score-label {
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+/* ══════════════════════════════════════════════
+   DAILY LOG PAGE
+══════════════════════════════════════════════ */
+.log-date-display {
+  text-align: center;
+  padding: 1rem;
+  background: var(--bg-secondary);
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+}
+
+.log-date-display h2 {
+  font-size: 1.25rem;
+  color: var(--accent);
+}
+
+.checkbox-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 0.75rem;
+}
+
+.checkbox-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  background: var(--bg-secondary);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid var(--border);
+}
+
+.checkbox-item:hover {
+  border-color: var(--accent);
+}
+
+.checkbox-item input {
+  display: none;
+}
+
+.checkbox-item .check-box {
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--border);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.checkbox-item input:checked + .check-box {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.checkbox-item input:checked + .check-box::after {
+  content: '✓';
+  color: white;
+  font-size: 0.75rem;
+}
+
+.checkbox-item .check-label {
+  font-size: 0.9rem;
+  flex: 1;
+}
+
+/* Rating Slider */
+.rating-slider-container {
+  margin-bottom: 1rem;
+}
+
+.rating-slider-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.rating-slider {
+  width: 100%;
+  height: 6px;
+  -webkit-appearance: none;
+  background: var(--bg-secondary);
+  border-radius: 3px;
+  outline: none;
+}
+
+.rating-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  background: var(--accent);
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+/* Mood Selection */
+.mood-options {
+  display: flex;
+  justify-content: space-around;
+  gap: 0.5rem;
+}
+
+.mood-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 2px solid transparent;
+}
+
+.mood-option:hover {
+  background: var(--bg-hover);
+}
+
+.mood-option.selected {
+  border-color: var(--accent);
+  background: rgba(124, 58, 237, 0.1);
+}
+
+.mood-emoji {
+  font-size: 1.75rem;
+}
+
+.mood-label {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+/* ══════════════════════════════════════════════
+   PERFORMANCE ANALYSIS PAGE
+══════════════════════════════════════════════ */
+.analysis-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 1rem;
+}
+
+/* Bar Chart */
+.bar-chart {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-around;
+  height: 200px;
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.bar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 1;
+}
+
+.bar-fill {
+  width: 30px;
+  background: var(--accent);
+  border-radius: 4px 4px 0 0;
+  transition: height 0.5s ease;
+  position: relative;
+}
+
+.bar-fill::after {
+  content: attr(data-score);
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.bar-label {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+/* Monthly Heatmap */
+.monthly-heatmap {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+
+.heatmap-cell {
+  aspect-ratio: 1;
+  border-radius: 3px;
+  background: var(--bg-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.65rem;
+  color: var(--text-muted);
+}
+
+.heatmap-cell.good {
+  background: var(--success);
+  color: white;
+}
+
+.heatmap-cell.average {
+  background: var(--warning);
+  color: white;
+}
+
+.heatmap-cell.missed {
+  background: var(--danger);
+  opacity: 0.3;
+}
+
+/* Verdict Box */
+.verdict-box {
+  padding: 1.5rem;
+  border-radius: 12px;
+  margin-top: 1rem;
+}
+
+.verdict-box.excellent {
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid var(--success);
+}
+
+.verdict-box.on-track {
+  background: rgba(124, 58, 237, 0.1);
+  border: 1px solid var(--accent);
+}
+
+.verdict-box.slipping {
+  background: rgba(245, 158, 11, 0.1);
+  border: 1px solid var(--warning);
+}
+
+.verdict-box.critical {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid var(--danger);
+}
+
+.verdict-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+/* Feedback Messages */
+.feedback-list {
+  margin-top: 1rem;
+}
+
+.feedback-item {
+  display: flex;
+  gap: 0.75rem;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 0.75rem;
+}
+
+.feedback-item.good {
+  background: rgba(16, 185, 129, 0.1);
+  border-left: 3px solid var(--success);
+}
+
+.feedback-item.bad {
+  background: rgba(239, 68, 68, 0.1);
+  border-left: 3px solid var(--danger);
+}
+
+.feedback-item.warning {
+  background: rgba(245, 158, 11, 0.1);
+  border-left: 3px solid var(--warning);
+}
+
+.feedback-icon {
+  font-size: 1.25rem;
+}
+
+.feedback-text {
+  flex: 1;
+  font-size: 0.9rem;
+}
+
+/* ══════════════════════════════════════════════
+   SUGGESTIONS PAGE
+══════════════════════════════════════════════ */
+.suggestion-card {
+  border-left: 4px solid var(--accent);
+}
+
+.hours-calculator {
+  background: var(--bg-secondary);
+  padding: 1rem;
+  border-radius: 8px;
+  font-family: monospace;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin-top: 0.75rem;
+}
+
+.interview-question {
+  background: linear-gradient(135deg, rgba(124, 58, 237, 0.1), rgba(124, 58, 237, 0.05));
+  padding: 1.5rem;
+  border-radius: 12px;
+  border: 1px solid var(--accent);
+}
+
+.interview-question h4 {
+  color: var(--accent);
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.interview-question p {
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.resource-list {
+  list-style: none;
+}
+
+.resource-list li {
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.resource-list li:last-child {
+  border-bottom: none;
+}
+
+.resource-icon {
+  width: 32px;
+  height: 32px;
+  background: var(--bg-secondary);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ══════════════════════════════════════════════
+   SETTINGS PAGE
+══════════════════════════════════════════════ */
+.settings-section {
+  margin-bottom: 2rem;
+}
+
+.settings-section h3 {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.day-selector {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.day-chip {
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.day-chip:hover {
+  border-color: var(--accent);
+}
+
+.day-chip.selected {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.danger-zone {
+  background: rgba(239, 68, 68, 0.05);
+  border: 1px solid var(--danger);
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+
+.danger-zone h3 {
+  color: var(--danger);
+  border-color: var(--danger);
+}
+
+/* ══════════════════════════════════════════════
+   MODAL
+══════════════════════════════════════════════ */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 2000;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.modal-overlay.active {
+  display: flex;
+}
+
+.modal {
+  background: var(--bg-card);
+  border-radius: 16px;
+  max-width: 500px;
+  width: 100%;
+  max-height: 80vh;
+  overflow-y: auto;
+  animation: modalIn 0.3s ease;
+}
+
+@keyframes modalIn {
+  from { transform: scale(0.9); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.modal-header {
+  padding: 1.5rem;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-header h3 {
+  font-size: 1.25rem;
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0.25rem;
+}
+
+.modal-body {
+  padding: 1.5rem;
+}
+
+.modal-footer {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+
+/* ══════════════════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  .hamburger {
+    display: flex;
+  }
+  
+  .nav-links {
+    display: none;
+    position: absolute;
+    top: 64px;
+    left: 0;
+    right: 0;
+    background: var(--bg-secondary);
+    flex-direction: column;
+    padding: 1rem;
+    border-bottom: 1px solid var(--border);
+  }
+  
+  .nav-links.open {
+    display: flex;
+  }
+  
+  .grid-2,
+  .grid-3,
+  .grid-4 {
+    grid-template-columns: 1fr;
+  }
+  
+  .analysis-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .dashboard-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .mood-options {
+    flex-wrap: wrap;
+  }
+  
+  .mood-option {
+    flex: 1;
+    min-width: 60px;
+  }
+}
+
+/* ══════════════════════════════════════════════
+   UTILITY CLASSES
+══════════════════════════════════════════════ */
+.text-center { text-align: center; }
+.text-success { color: var(--success); }
+.text-warning { color: var(--warning); }
+.text-danger { color: var(--danger); }
+.text-muted { color: var(--text-muted); }
+.mt-1 { margin-top: 0.5rem; }
+.mt-2 { margin-top: 1rem; }
+.mt-3 { margin-top: 1.5rem; }
+.mb-1 { margin-bottom: 0.5rem; }
+.mb-2 { margin-bottom: 1rem; }
+.mb-3 { margin-bottom: 1.5rem; }
+.hidden { display: none !important; }
+
+</style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav>
+  <div class="nav-container">
+    <div class="nav-logo">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+        <path d="M2 17l10 5 10-5"/>
+        <path d="M2 12l10 5 10-5"/>
+      </svg>
+      <span>SC Dev Tracker</span>
+    </div>
+    
+    <div class="hamburger" onclick="toggleMobileMenu()">
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+    
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#" data-page="dashboard" class="active">📊 Dashboard</a></li>
+      <li><a href="#" data-page="daily-log">📝 Daily Log</a></li>
+      <li><a href="#" data-page="performance">📈 Performance</a></li>
+      <li><a href="#" data-page="suggestions">💡 Suggestions</a></li>
+      <li><a href="#" data-page="settings">⚙️ Settings</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- Main Content -->
+<main>
+  <!-- Dashboard Page -->
+  <div class="page active" id="page-dashboard">
+    <div class="dashboard-header">
+      <div class="date-info">
+        <h1 id="currentDate">Loading...</h1>
+        <p id="roadmapDay">Day X of 365</p>
+      </div>
+      <div class="streak-display">
+        <span class="streak-fire">🔥</span>
+        <div>
+          <div class="streak-count" id="streakCount">0</div>
+          <div class="streak-label">day streak</div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Stats Row -->
+    <div class="grid-4 mb-2" id="statsGrid">
+      <div class="card stat-card">
+        <div class="stat-value" id="totalDaysLogged">0</div>
+        <div class="stat-label">Days Logged</div>
+      </div>
+      <div class="card stat-card">
+        <div class="stat-value" id="totalTopics">0</div>
+        <div class="stat-label">Topics Covered</div>
+      </div>
+      <div class="card stat-card">
+        <div class="stat-value" id="totalHours">0</div>
+        <div class="stat-label">Hours Studied</div>
+      </div>
+      <div class="card stat-card">
+        <div class="stat-value" id="avgScore">0</div>
+        <div class="stat-label">Avg Score</div>
+      </div>
+    </div>
+    
+    <!-- Current Phase -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">Current Phase</div>
+        <span class="badge badge-primary" id="phaseNumber">Phase 1</span>
+      </div>
+      <div class="phase-info">
+        <div class="phase-name" id="phaseName">Programming Foundations</div>
+        <div class="phase-dates" id="phaseDates">Months 1-2</div>
+        <div class="phase-progress-text">
+          <span id="phaseTopicsProgress">0 / 6 topics</span>
+          <span id="phasePercent">0%</span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="phaseProgressBar" style="width: 0%"></div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Today's Status and Daily Target -->
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title mb-1">Today's Status</div>
+        <div class="today-status not-started" id="todayStatus">
+          <span class="status-icon">⏳</span>
+          <div>
+            <div id="statusText">Not Started</div>
+            <div class="text-muted" id="statusSubtext">Log your session to track progress</div>
+          </div>
+        </div>
+        <button class="btn btn-primary btn-lg" style="width: 100%" onclick="navigateTo('daily-log')">
+          📝 Log Today's Session
+        </button>
+      </div>
+      
+      <div class="card">
+        <div class="card-title mb-1">Daily Target</div>
+        <p class="text-muted mb-1">Topics to cover today:</p>
+        <div class="target-topics" id="targetTopics">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+    </div>
+    
+    <!-- Today's Score and Weekly Heatmap -->
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title mb-2 text-center">Today's Performance Score</div>
+        <div class="score-circle" id="scoreCircle">
+          <span class="score-value" id="todayScore">-</span>
+        </div>
+        <div class="score-label" id="scoreVerdict">No session logged today</div>
+      </div>
+      
+      <div class="card">
+        <div class="card-title mb-1">Last 7 Days</div>
+        <div class="mini-heatmap" id="weeklyHeatmap">
+          <!-- Populated by JS -->
+        </div>
+        <div class="mt-2 text-muted" style="font-size: 0.8rem;">
+          <span style="color: var(--success);">●</span> Logged 
+          <span style="color: var(--text-muted); margin-left: 0.5rem;">●</span> Missed
+        </div>
+      </div>
+    </div>
+    
+    <!-- Feedback Section -->
+    <div class="card">
+      <div class="card-title mb-1">Feedback & Insights</div>
+      <div class="feedback-list" id="feedbackList">
+        <!-- Populated by JS -->
+      </div>
+    </div>
+  </div>
+  
+  <!-- Daily Log Page -->
+  <div class="page" id="page-daily-log">
+    <h1 class="mb-2">📝 Daily Learning Log</h1>
+    
+    <div class="log-date-display">
+      <h2 id="logDateDisplay">Today's Date</h2>
+      <p class="text-muted">Record your learning progress for today</p>
+    </div>
+    
+    <form id="dailyLogForm">
+      <!-- Hours Studied -->
+      <div class="card">
+        <div class="card-title mb-2">⏱️ Hours Studied Today</div>
+        <input type="number" class="form-input" id="hoursStudied" min="0" max="12" step="0.5" value="0" required>
+        <p class="text-muted mt-1" style="font-size: 0.85rem;">Enter hours from 0 to 12 (half hours allowed)</p>
+      </div>
+      
+      <!-- Topics Covered -->
+      <div class="card">
+        <div class="card-title mb-2">📚 Topics Covered Today</div>
+        <p class="text-muted mb-2">Select the topics you studied (recommended topics for today are pre-selected)</p>
+        <div class="checkbox-grid" id="topicsCheckboxes">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+      
+      <!-- Understanding Ratings -->
+      <div class="card" id="ratingsCard" style="display: none;">
+        <div class="card-title mb-2">🎯 Self-Rated Understanding</div>
+        <p class="text-muted mb-2">Rate your understanding of each topic (1 = confused, 10 = mastered)</p>
+        <div id="understandingRatings">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+      
+      <!-- Hands-on Practice -->
+      <div class="card">
+        <div class="card-title mb-2">🛠️ Hands-on Practice Done Today</div>
+        <div class="checkbox-grid" id="practiceCheckboxes">
+          <label class="checkbox-item">
+            <input type="checkbox" name="practice" value="Wrote code">
+            <span class="check-box"></span>
+            <span class="check-label">Wrote code</span>
+          </label>
+          <label class="checkbox-item">
+            <input type="checkbox" name="practice" value="Deployed to testnet">
+            <span class="check-box"></span>
+            <span class="check-label">Deployed to testnet</span>
+          </label>
+          <label class="checkbox-item">
+            <input type="checkbox" name="practice" value="Ran tests">
+            <span class="check-box"></span>
+            <span class="check-label">Ran tests</span>
+          </label>
+          <label class="checkbox-item">
+            <input type="checkbox" name="practice" value="Read documentation">
+            <span class="check-box"></span>
+            <span class="check-label">Read documentation</span>
+          </label>
+          <label class="checkbox-item">
+            <input type="checkbox" name="practice" value="Watched tutorial">
+            <span class="check-box"></span>
+            <span class="check-label">Watched tutorial</span>
+          </label>
+          <label class="checkbox-item">
+            <input type="checkbox" name="practice" value="Built something new">
+            <span class="check-box"></span>
+            <span class="check-label">Built something new</span>
+          </label>
+        </div>
+      </div>
+      
+      <!-- Mood/Energy Rating -->
+      <div class="card">
+        <div class="card-title mb-2">😊 Mood / Energy Level</div>
+        <div class="mood-options" id="moodOptions">
+          <div class="mood-option" data-mood="exhausted" onclick="selectMood('exhausted')">
+            <span class="mood-emoji">😫</span>
+            <span class="mood-label">Exhausted</span>
+          </div>
+          <div class="mood-option" data-mood="tired" onclick="selectMood('tired')">
+            <span class="mood-emoji">😴</span>
+            <span class="mood-label">Tired</span>
+          </div>
+          <div class="mood-option" data-mood="neutral" onclick="selectMood('neutral')">
+            <span class="mood-emoji">😐</span>
+            <span class="mood-label">Neutral</span>
+          </div>
+          <div class="mood-option" data-mood="good" onclick="selectMood('good')">
+            <span class="mood-emoji">🙂</span>
+            <span class="mood-label">Good</span>
+          </div>
+          <div class="mood-option" data-mood="energized" onclick="selectMood('energized')">
+            <span class="mood-emoji">🚀</span>
+            <span class="mood-label">Energized</span>
+          </div>
+        </div>
+        <input type="hidden" id="selectedMood" value="">
+      </div>
+      
+      <!-- Notes -->
+      <div class="card">
+        <div class="card-title mb-2">📝 Notes</div>
+        <textarea class="form-textarea" id="notes" placeholder="What did you learn? What was confusing?"></textarea>
+      </div>
+      
+      <!-- Challenges -->
+      <div class="card">
+        <div class="card-title mb-2">🚧 Challenges Faced Today</div>
+        <div class="checkbox-grid" id="challengesCheckboxes">
+          <label class="checkbox-item">
+            <input type="checkbox" name="challenges" value="Didn't understand the concept">
+            <span class="check-box"></span>
+            <span class="check-label">Didn't understand the concept</span>
+          </label>
+          <label class="checkbox-item">
+            <input type="checkbox" name="challenges" value="Ran out of time">
+            <span class="check-box"></span>
+            <span class="check-label">Ran out of time</span>
+          </label>
+          <label class="checkbox-item">
+            <input type="checkbox" name="challenges" value="Got stuck on a bug">
+            <span class="check-box"></span>
+            <span class="check-label">Got stuck on a bug</span>
+          </label>
+          <label class="checkbox-item">
+            <input type="checkbox" name="challenges" value="Lost motivation">
+            <span class="check-box"></span>
+            <span class="check-label">Lost motivation</span>
+          </label>
+          <label class="checkbox-item">
+            <input type="checkbox" name="challenges" value="Too tired">
+            <span class="check-box"></span>
+            <span class="check-label">Too tired</span>
+          </label>
+          <label class="checkbox-item">
+            <input type="checkbox" name="challenges" value="Technical setup issues">
+            <span class="check-box"></span>
+            <span class="check-label">Technical setup issues</span>
+          </label>
+          <label class="checkbox-item">
+            <input type="checkbox" name="challenges" value="No challenges">
+            <span class="check-box"></span>
+            <span class="check-label">No challenges</span>
+          </label>
+        </div>
+      </div>
+      
+      <!-- Submit Button -->
+      <button type="submit" class="btn btn-success btn-lg" style="width: 100%">
+        ✅ Submit Daily Log
+      </button>
+    </form>
+  </div>
+  
+  <!-- Performance Analysis Page -->
+  <div class="page" id="page-performance">
+    <h1 class="mb-2">📈 Performance Analysis</h1>
+    
+    <!-- Overall Progress -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">Overall Roadmap Progress</div>
+        <span class="badge badge-primary" id="overallPercent">0%</span>
+      </div>
+      <div class="progress-bar" style="height: 12px;">
+        <div class="progress-fill" id="overallProgressBar" style="width: 0%"></div>
+      </div>
+      <div class="grid-3 mt-2" style="text-align: center;">
+        <div>
+          <div class="text-muted">Days Completed</div>
+          <div id="daysCompleted" style="font-size: 1.25rem; font-weight: 600;">0 / 365</div>
+        </div>
+        <div>
+          <div class="text-muted">Projected Finish</div>
+          <div id="projectedFinish" style="font-size: 1.25rem; font-weight: 600;">-</div>
+        </div>
+        <div>
+          <div class="text-muted">Status</div>
+          <div id="paceStatus" style="font-size: 1.25rem; font-weight: 600;">-</div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="analysis-grid">
+      <div>
+        <!-- Weekly Performance Chart -->
+        <div class="card">
+          <div class="card-title mb-2">Weekly Performance (Last 7 Days)</div>
+          <div class="bar-chart" id="weeklyChart">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+        
+        <!-- Monthly Heatmap -->
+        <div class="card">
+          <div class="card-title mb-2">Monthly Activity Heatmap</div>
+          <div class="monthly-heatmap" id="monthlyHeatmap">
+            <!-- Populated by JS -->
+          </div>
+          <div class="mt-2 text-muted" style="font-size: 0.8rem;">
+            <span style="color: var(--success);">●</span> Good (70+)
+            <span style="color: var(--warning); margin-left: 0.5rem;">●</span> Average (40-69)
+            <span style="color: var(--danger); margin-left: 0.5rem; opacity: 0.5;">●</span> Missed
+          </div>
+        </div>
+      </div>
+      
+      <div>
+        <!-- Streak Stats -->
+        <div class="card">
+          <div class="card-title mb-2">🔥 Streak Stats</div>
+          <div class="stat-card" style="padding: 0.5rem;">
+            <div class="stat-value" id="currentStreak">0</div>
+            <div class="stat-label">Current Streak</div>
+          </div>
+          <div class="grid-2 mt-1">
+            <div class="text-center">
+              <div style="font-size: 1.25rem; font-weight: 600;" id="longestStreak">0</div>
+              <div class="text-muted" style="font-size: 0.8rem;">Longest</div>
+            </div>
+            <div class="text-center">
+              <div style="font-size: 1.25rem; font-weight: 600;" id="totalMissed">0</div>
+              <div class="text-muted" style="font-size: 0.8rem;">Days Missed</div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Phase Completion -->
+        <div class="card">
+          <div class="card-title mb-2">Phase Progress</div>
+          <div id="phaseCompletion">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Strong & Weak Areas -->
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title mb-2">💪 Strong Areas</div>
+        <div id="strongAreas">
+          <p class="text-muted">Topics with consistent 8+ understanding ratings</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title mb-2">📌 Areas to Improve</div>
+        <div id="weakAreas">
+          <p class="text-muted">Topics rated below 5 or frequently skipped</p>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Verdict -->
+    <div class="verdict-box on-track" id="verdictBox">
+      <div class="verdict-title" id="verdictTitle">Performance Verdict</div>
+      <p id="verdictText">Start logging your sessions to see your performance verdict.</p>
+    </div>
+    
+    <!-- Detailed Feedback -->
+    <div class="card mt-2">
+      <div class="card-title mb-2">📊 Detailed Insights</div>
+      <div class="feedback-list" id="performanceFeedback">
+        <!-- Populated by JS -->
+      </div>
+    </div>
+  </div>
+  
+  <!-- Daily Suggestions Page -->
+  <div class="page" id="page-suggestions">
+    <h1 class="mb-2">💡 Daily Suggestions</h1>
+    
+    <!-- Today's Recommended Topics -->
+    <div class="card suggestion-card">
+      <div class="card-title mb-2">📚 Today's Recommended Topics</div>
+      <div class="target-topics" id="suggestedTopics">
+        <!-- Populated by JS -->
+      </div>
+    </div>
+    
+    <!-- Hours Calculation -->
+    <div class="card">
+      <div class="card-title mb-2">⏱️ Minimum Hours Needed Today</div>
+      <div id="hoursNeeded">
+        <div style="font-size: 2rem; font-weight: 700; color: var(--accent);" id="minHoursValue">2</div>
+        <div class="text-muted">hours recommended</div>
+      </div>
+      <div class="hours-calculator" id="hoursCalculation">
+        <!-- Formula displayed here -->
+      </div>
+    </div>
+    
+    <!-- Status Message -->
+    <div class="card" id="statusMessageCard">
+      <div class="card-title mb-2" id="statusMessageTitle">📈 Your Progress Status</div>
+      <p id="statusMessage">Analyzing your progress...</p>
+      <div id="catchUpPlan" class="mt-2" style="display: none;">
+        <!-- Catch up plan -->
+      </div>
+    </div>
+    
+    <!-- Recommended Resources -->
+    <div class="card">
+      <div class="card-title mb-2">📖 Recommended Resources</div>
+      <ul class="resource-list" id="resourceList">
+        <!-- Populated by JS -->
+      </ul>
+    </div>
+    
+    <!-- Interview Question of the Day -->
+    <div class="interview-question">
+      <h4>💼 Interview Question of the Day</h4>
+      <p id="interviewQuestion">Loading question...</p>
+    </div>
+  </div>
+  
+  <!-- Settings Page -->
+  <div class="page" id="page-settings">
+    <h1 class="mb-2">⚙️ Settings</h1>
+    
+    <div class="card">
+      <div class="settings-section">
+        <h3>📅 Roadmap Start Date</h3>
+        <p class="text-muted mb-2">The date you started (or plan to start) your learning journey. This calibrates all day calculations.</p>
+        <input type="date" class="form-input" id="startDate" style="max-width: 300px;">
+      </div>
+      
+      <div class="settings-section">
+        <h3>⏱️ Daily Study Goal</h3>
+        <p class="text-muted mb-2">Your target study hours per day (default: 2 hours)</p>
+        <input type="number" class="form-input" id="dailyGoal" min="0.5" max="12" step="0.5" value="2" style="max-width: 150px;">
+        <span class="text-muted"> hours</span>
+      </div>
+      
+      <div class="settings-section">
+        <h3>📆 Weekly Off Days</h3>
+        <p class="text-muted mb-2">Select days when you don't plan to study (excluded from streak calculations)</p>
+        <div class="day-selector" id="offDaysSelector">
+          <div class="day-chip" data-day="Sunday" onclick="toggleOffDay('Sunday')">Sunday</div>
+          <div class="day-chip" data-day="Monday" onclick="toggleOffDay('Monday')">Monday</div>
+          <div class="day-chip" data-day="Tuesday" onclick="toggleOffDay('Tuesday')">Tuesday</div>
+          <div class="day-chip" data-day="Wednesday" onclick="toggleOffDay('Wednesday')">Wednesday</div>
+          <div class="day-chip" data-day="Thursday" onclick="toggleOffDay('Thursday')">Thursday</div>
+          <div class="day-chip" data-day="Friday" onclick="toggleOffDay('Friday')">Friday</div>
+          <div class="day-chip" data-day="Saturday" onclick="toggleOffDay('Saturday')">Saturday</div>
+        </div>
+      </div>
+      
+      <button class="btn btn-primary" onclick="saveSettings()">💾 Save Settings</button>
+    </div>
+    
+    <div class="card">
+      <div class="settings-section">
+        <h3>📤 Export Data</h3>
+        <p class="text-muted mb-2">Download all your tracking data as a JSON file</p>
+        <button class="btn btn-outline" onclick="exportData()">📥 Download JSON</button>
+      </div>
+    </div>
+    
+    <div class="card danger-zone">
+      <div class="settings-section" style="margin-bottom: 0;">
+        <h3>⚠️ Danger Zone</h3>
+        <p class="text-muted mb-2">Reset all data and start fresh. This action cannot be undone!</p>
+        <button class="btn btn-danger" onclick="confirmReset()">🗑️ Reset All Data</button>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- Modal -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="modalTitle">Modal Title</h3>
+      <button class="modal-close" onclick="closeModal()">&times;</button>
+    </div>
+    <div class="modal-body" id="modalBody">
+      Modal content
+    </div>
+    <div class="modal-footer" id="modalFooter">
+      <button class="btn btn-outline" onclick="closeModal()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════
+// ROADMAP DATA
+// ══════════════════════════════════════════════
+const ROADMAP = [
+  {
+    phase: 1,
+    name: "Programming Foundations",
+    months: "1-2",
+    duration: 61, // ~2 months
+    topics: ["JavaScript ES6+", "OOP", "Data Structures", "Git & GitHub", "Node.js", "Command Line"],
+    resources: [
+      { name: "MDN JavaScript Guide", url: "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide" },
+      { name: "JavaScript.info", url: "https://javascript.info/" },
+      { name: "Git Documentation", url: "https://git-scm.com/doc" },
+      { name: "Node.js Docs", url: "https://nodejs.org/en/docs/" }
+    ]
+  },
+  {
+    phase: 2,
+    name: "Blockchain Fundamentals",
+    months: "3",
+    duration: 30, // 1 month
+    topics: ["How Blockchain Works", "Ethereum & EVM", "Wallets & Keys", "Gas & Transactions", "Proof of Stake", "Testnets"],
+    resources: [
+      { name: "Ethereum.org Learn", url: "https://ethereum.org/en/learn/" },
+      { name: "Mastering Ethereum", url: "https://github.com/ethereumbook/ethereumbook" },
+      { name: "EVM Explained", url: "https://ethereum.org/en/developers/docs/evm/" }
+    ]
+  },
+  {
+    phase: 3,
+    name: "Solidity",
+    months: "4-5",
+    duration: 61, // ~2 months
+    topics: ["Data Types", "Functions", "Mappings & Arrays", "Structs & Enums", "Events", "Constructor", "Inheritance", "Interfaces", "Modifiers", "Error Handling", "ETH Handling", "Storage vs Memory", "Gas Optimization", "Proxy Patterns"],
+    resources: [
+      { name: "Solidity Documentation", url: "https://docs.soliditylang.org/" },
+      { name: "CryptoZombies", url: "https://cryptozombies.io/" },
+      { name: "Solidity by Example", url: "https://solidity-by-example.org/" }
+    ]
+  },
+  {
+    phase: 4,
+    name: "Development Tooling",
+    months: "6",
+    duration: 30, // 1 month
+    topics: ["Foundry (forge, cast, anvil)", "Hardhat", "OpenZeppelin", "Alchemy/Infura", "Ethers.js", "Chainlink"],
+    resources: [
+      { name: "Foundry Book", url: "https://book.getfoundry.sh/" },
+      { name: "Hardhat Documentation", url: "https://hardhat.org/docs" },
+      { name: "OpenZeppelin Docs", url: "https://docs.openzeppelin.com/" },
+      { name: "Ethers.js Documentation", url: "https://docs.ethers.org/" }
+    ]
+  },
+  {
+    phase: 5,
+    name: "Token Standards & DeFi",
+    months: "7",
+    duration: 30, // 1 month
+    topics: ["ERC-20", "ERC-721", "ERC-1155", "ERC-4626", "Uniswap V2/V3", "Aave/Compound", "Flash Loans"],
+    resources: [
+      { name: "EIPs (ERC Standards)", url: "https://eips.ethereum.org/" },
+      { name: "Uniswap V2 Docs", url: "https://docs.uniswap.org/contracts/v2/overview" },
+      { name: "Aave Documentation", url: "https://docs.aave.com/" }
+    ]
+  },
+  {
+    phase: 6,
+    name: "Security",
+    months: "8-9",
+    duration: 61, // ~2 months
+    topics: ["Reentrancy", "Access Control", "Integer Overflow", "Oracle Manipulation", "Front Running", "Delegatecall", "Self-Destruct", "Signature Replay", "Slither", "Mythril", "Ethernaut", "Damn Vulnerable DeFi"],
+    resources: [
+      { name: "SWC Registry", url: "https://swcregistry.io/" },
+      { name: "Ethernaut", url: "https://ethernaut.openzeppelin.com/" },
+      { name: "Damn Vulnerable DeFi", url: "https://www.damnvulnerabledefi.xyz/" },
+      { name: "Slither Docs", url: "https://github.com/crytic/slither" }
+    ]
+  },
+  {
+    phase: 7,
+    name: "Portfolio Projects",
+    months: "10-11",
+    duration: 61, // ~2 months
+    topics: ["ERC-20 Token + Staking", "NFT Collection (ERC-721)", "DeFi Lending Protocol", "DAO with Governance", "Simple DEX (AMM)"],
+    resources: [
+      { name: "OpenZeppelin Wizard", url: "https://wizard.openzeppelin.com/" },
+      { name: "scaffold-eth", url: "https://github.com/scaffold-eth/scaffold-eth-2" },
+      { name: "useWeb3 Resources", url: "https://www.useweb3.xyz/" }
+    ]
+  },
+  {
+    phase: 8,
+    name: "Job Hunt",
+    months: "12+",
+    duration: 31, // ~1 month (365 - sum of others)
+    topics: ["Building Portfolio on GitHub", "Applying on crypto.jobs / web3.career / remote3.co", "Protocol Discord activity", "Technical Interview Prep (ERC-20 from scratch, Security Audit, Gas Optimization, Proxy Pattern)"],
+    resources: [
+      { name: "crypto.jobs", url: "https://crypto.jobs/" },
+      { name: "web3.career", url: "https://web3.career/" },
+      { name: "remote3.co", url: "https://remote3.co/" }
+    ]
+  }
+];
+
+// Interview Questions Bank
+const INTERVIEW_QUESTIONS = [
+  "Explain reentrancy and how to prevent it.",
+  "What is the difference between storage, memory, and calldata?",
+  "Write an ERC-20 transfer function from scratch.",
+  "How does the EVM execute smart contract bytecode?",
+  "What is a proxy pattern and when would you use it?",
+  "Explain the difference between delegatecall and call.",
+  "What are flash loans and how do they work?",
+  "How do you optimize gas in Solidity?",
+  "What is the difference between public, external, internal, and private functions?",
+  "Explain how Uniswap's constant product formula works.",
+  "What is frontrunning and how can it be mitigated?",
+  "How do ERC-721 tokens differ from ERC-1155?",
+  "What is integer overflow and how does Solidity 0.8+ handle it?",
+  "Explain the purpose of modifiers in Solidity.",
+  "What is the selfdestruct function and why is it dangerous?",
+  "How does Ethereum's proof of stake consensus work?",
+  "What are events in Solidity and why are they useful?",
+  "Explain the concept of gas and gas limits.",
+  "What is a DAO and how is governance implemented?",
+  "How do you test smart contracts effectively?",
+  "What is the difference between require, assert, and revert?",
+  "Explain how oracle manipulation attacks work.",
+  "What are mappings in Solidity and their limitations?",
+  "How do you implement access control in smart contracts?",
+  "What is signature replay attack and how to prevent it?",
+  "Explain the ERC-4626 tokenized vault standard.",
+  "What tools would you use for smart contract security auditing?",
+  "How does Chainlink provide decentralized oracle data?",
+  "What is the difference between inheritance and interfaces in Solidity?",
+  "Explain how AMMs (Automated Market Makers) work."
+];
+
+// ══════════════════════════════════════════════
+// STORAGE KEY
+// ══════════════════════════════════════════════
+const STORAGE_KEY = "blockchain_tracker";
+
+// ══════════════════════════════════════════════
+// APP STATE
+// ══════════════════════════════════════════════
+let appData = {
+  settings: {
+    startDate: new Date().toISOString().split('T')[0],
+    dailyGoalHours: 2,
+    offDays: ["Sunday"]
+  },
+  logs: {}
+};
+
+// ══════════════════════════════════════════════
+// UTILITY FUNCTIONS
+// ══════════════════════════════════════════════
+function formatDate(date) {
+  return date.toISOString().split('T')[0];
+}
+
+function parseDate(dateStr) {
+  return new Date(dateStr + 'T00:00:00');
+}
+
+function getDayName(date) {
+  return date.toLocaleDateString('en-US', { weekday: 'long' });
+}
+
+function getDaysBetween(date1, date2) {
+  const d1 = new Date(date1);
+  const d2 = new Date(date2);
+  const diffTime = d2 - d1;
+  return Math.floor(diffTime / (1000 * 60 * 60 * 24));
+}
+
+function addDays(date, days) {
+  const result = new Date(date);
+  result.setDate(result.getDate() + days);
+  return result;
+}
+
+// ══════════════════════════════════════════════
+// DATA MANAGEMENT
+// ══════════════════════════════════════════════
+function loadData() {
+  const saved = localStorage.getItem(STORAGE_KEY);
+  if (saved) {
+    try {
+      appData = JSON.parse(saved);
+    } catch (e) {
+      console.error("Error loading data:", e);
+    }
+  }
+}
+
+function saveData() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
+}
+
+// ══════════════════════════════════════════════
+// ROADMAP CALCULATIONS
+// ══════════════════════════════════════════════
+function getCurrentDayNumber() {
+  const startDate = parseDate(appData.settings.startDate);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const dayNum = getDaysBetween(startDate, today) + 1;
+  return Math.max(1, Math.min(dayNum, 365));
+}
+
+function getCurrentPhase(dayNumber) {
+  let accumulatedDays = 0;
+  for (const phase of ROADMAP) {
+    if (dayNumber <= accumulatedDays + phase.duration) {
+      return {
+        ...phase,
+        startDay: accumulatedDays + 1,
+        endDay: accumulatedDays + phase.duration,
+        currentDayInPhase: dayNumber - accumulatedDays
+      };
+    }
+    accumulatedDays += phase.duration;
+  }
+  // Return last phase if beyond
+  const lastPhase = ROADMAP[ROADMAP.length - 1];
+  return {
+    ...lastPhase,
+    startDay: 365 - lastPhase.duration + 1,
+    endDay: 365,
+    currentDayInPhase: lastPhase.duration
+  };
+}
+
+function getTopicsForDay(dayNumber) {
+  const phase = getCurrentPhase(dayNumber);
+  const topicsPerDay = phase.topics.length / phase.duration;
+  const dayInPhase = phase.currentDayInPhase;
+  
+  // Calculate which topics to cover today
+  const startIndex = Math.floor((dayInPhase - 1) * topicsPerDay);
+  const endIndex = Math.ceil(dayInPhase * topicsPerDay);
+  
+  return phase.topics.slice(startIndex, Math.min(endIndex, phase.topics.length));
+}
+
+function getAllTopicsUpToPhase(phaseNum) {
+  const topics = [];
+  for (let i = 0; i < phaseNum && i < ROADMAP.length; i++) {
+    topics.push(...ROADMAP[i].topics);
+  }
+  return topics;
+}
+
+function getAllTopics() {
+  const topics = [];
+  for (const phase of ROADMAP) {
+    topics.push(...phase.topics);
+  }
+  return topics;
+}
+
+// ══════════════════════════════════════════════
+// PERFORMANCE CALCULATIONS
+// ══════════════════════════════════════════════
+function calculateDailyScore(logEntry, recommendedTopics) {
+  const dailyGoal = appData.settings.dailyGoalHours || 2;
+  let score = 0;
+  
+  // Hours studied: up to 40 points (goal hours = full 40 points)
+  const hoursPoints = Math.min(40, (logEntry.hoursStudied / dailyGoal) * 40);
+  score += hoursPoints;
+  
+  // Topics covered: up to 30 points
+  const topicsCovered = logEntry.topicsCovered?.length || 0;
+  const recommendedCount = recommendedTopics?.length || 1;
+  const topicsPoints = Math.min(30, (topicsCovered / recommendedCount) * 30);
+  score += topicsPoints;
+  
+  // Understanding ratings: up to 20 points (scale 1-10 to 0-20)
+  if (logEntry.understandingRatings && Object.keys(logEntry.understandingRatings).length > 0) {
+    const ratings = Object.values(logEntry.understandingRatings);
+    const avgRating = ratings.reduce((a, b) => a + b, 0) / ratings.length;
+    const understandingPoints = (avgRating / 10) * 20;
+    score += understandingPoints;
+  }
+  
+  // Hands-on practice: up to 10 points (2 per activity)
+  const practiceCount = logEntry.practiceActivities?.length || 0;
+  const practicePoints = Math.min(10, practiceCount * 2);
+  score += practicePoints;
+  
+  return Math.round(score);
+}
+
+function getScoreVerdict(score) {
+  if (score >= 85) return "Excellent day";
+  if (score >= 70) return "Good day";
+  if (score >= 50) return "Average day";
+  if (score >= 30) return "Poor day";
+  return "Very poor day";
+}
+
+function getScoreColor(score) {
+  if (score >= 85) return 'var(--success)';
+  if (score >= 70) return 'var(--accent)';
+  if (score >= 50) return 'var(--warning)';
+  return 'var(--danger)';
+}
+
+// ══════════════════════════════════════════════
+// STREAK CALCULATIONS
+// ══════════════════════════════════════════════
+function calculateStreak() {
+  const today = formatDate(new Date());
+  const offDays = appData.settings.offDays || [];
+  let streak = 0;
+  let currentDate = new Date();
+  
+  // Check if today is logged
+  if (!appData.logs[today]) {
+    currentDate = addDays(currentDate, -1);
+  }
+  
+  while (true) {
+    const dateStr = formatDate(currentDate);
+    const dayName = getDayName(currentDate);
+    
+    // Skip off days
+    if (offDays.includes(dayName)) {
+      currentDate = addDays(currentDate, -1);
+      continue;
+    }
+    
+    // Check if the date is before start date
+    if (parseDate(dateStr) < parseDate(appData.settings.startDate)) {
+      break;
+    }
+    
+    if (appData.logs[dateStr]) {
+      streak++;
+      currentDate = addDays(currentDate, -1);
+    } else {
+      break;
+    }
+  }
+  
+  return streak;
+}
+
+function calculateLongestStreak() {
+  const logs = Object.keys(appData.logs).sort();
+  if (logs.length === 0) return 0;
+  
+  const offDays = appData.settings.offDays || [];
+  let longestStreak = 0;
+  let currentStreak = 0;
+  let prevDate = null;
+  
+  for (const dateStr of logs) {
+    if (prevDate) {
+      let expectedDate = addDays(parseDate(prevDate), 1);
+      let gapOk = true;
+      
+      // Check for gaps (excluding off days)
+      while (formatDate(expectedDate) !== dateStr) {
+        const dayName = getDayName(expectedDate);
+        if (!offDays.includes(dayName)) {
+          gapOk = false;
+          break;
+        }
+        expectedDate = addDays(expectedDate, 1);
+        if (expectedDate > parseDate(dateStr)) {
+          gapOk = false;
+          break;
+        }
+      }
+      
+      if (gapOk) {
+        currentStreak++;
+      } else {
+        longestStreak = Math.max(longestStreak, currentStreak);
+        currentStreak = 1;
+      }
+    } else {
+      currentStreak = 1;
+    }
+    prevDate = dateStr;
+  }
+  
+  return Math.max(longestStreak, currentStreak);
+}
+
+// ══════════════════════════════════════════════
+// FEEDBACK GENERATION
+// ══════════════════════════════════════════════
+function generateFeedback() {
+  const feedback = [];
+  const logs = appData.logs;
+  const today = formatDate(new Date());
+  const streak = calculateStreak();
+  
+  // Get recent logs
+  const recentDates = [];
+  for (let i = 0; i < 7; i++) {
+    const date = addDays(new Date(), -i);
+    recentDates.push(formatDate(date));
+  }
+  
+  const recentLogs = recentDates.map(d => logs[d]).filter(Boolean);
+  const recentScores = recentLogs.map(l => l.score || 0);
+  
+  // Good feedback triggers
+  
+  // 7-day streak
+  if (streak >= 7) {
+    feedback.push({
+      type: 'good',
+      icon: '🔥',
+      text: `One week streak! Consistency is the #1 predictor of success. Keep it going!`
+    });
+  }
+  
+  // 3+ consecutive days with score above 70
+  const highScoreDays = recentScores.slice(0, 3).filter(s => s >= 70).length;
+  if (highScoreDays >= 3) {
+    feedback.push({
+      type: 'good',
+      icon: '⭐',
+      text: `Great consistency this week! You are building a strong habit.`
+    });
+  }
+  
+  // Check for mastered topics (9-10 rating)
+  const allRatings = {};
+  Object.values(logs).forEach(log => {
+    if (log.understandingRatings) {
+      Object.entries(log.understandingRatings).forEach(([topic, rating]) => {
+        if (!allRatings[topic]) allRatings[topic] = [];
+        allRatings[topic].push(rating);
+      });
+    }
+  });
+  
+  const masteredTopics = Object.entries(allRatings)
+    .filter(([topicName, ratings]) => ratings.some(r => r >= 9))
+    .map(([topicName]) => topicName);
+  
+  if (masteredTopics.length > 0) {
+    const recentMastered = masteredTopics.slice(0, 2);
+    feedback.push({
+      type: 'good',
+      icon: '🏆',
+      text: `You have mastered ${recentMastered.join(', ')}. This is interview-ready knowledge!`
+    });
+  }
+  
+  // Studied 3+ hours today
+  if (logs[today]?.hoursStudied >= 3) {
+    feedback.push({
+      type: 'good',
+      icon: '💪',
+      text: `Strong study session today! You covered more than your daily target.`
+    });
+  }
+  
+  // Bad feedback triggers
+  
+  // Missed 2 consecutive days
+  const missedDays = [];
+  for (let i = 1; i <= 3; i++) {
+    const date = formatDate(addDays(new Date(), -i));
+    const dayName = getDayName(addDays(new Date(), -i));
+    if (!(appData.settings.offDays || []).includes(dayName) && !logs[date]) {
+      missedDays.push(date);
+    }
+  }
+  
+  if (missedDays.length >= 2) {
+    feedback.push({
+      type: 'bad',
+      icon: '⚠️',
+      text: `You have missed ${missedDays.length} days in a row. Missing more than 3 days breaks learning momentum. Log at least 30 minutes tomorrow.`
+    });
+  }
+  
+  // Score below 40 for 3 consecutive days
+  const lowScoreDays = recentScores.slice(0, 3).filter(s => s > 0 && s < 40).length;
+  if (lowScoreDays >= 3) {
+    const phase = getCurrentPhase(getCurrentDayNumber());
+    feedback.push({
+      type: 'bad',
+      icon: '📉',
+      text: `Your last 3 days have been below average. Are you stuck on something? Consider revisiting the basics of ${phase.name}.`
+    });
+  }
+  
+  // Weak topics (rated below 5 twice)
+  const weakTopics = Object.entries(allRatings)
+    .filter(([topicName, ratings]) => ratings.filter(r => r <= 5).length >= 2)
+    .map(([topicName]) => topicName);
+  
+  if (weakTopics.length > 0) {
+    feedback.push({
+      type: 'warning',
+      icon: '📌',
+      text: `${weakTopics[0]} is a weak spot. Spend an extra 30 minutes on this tomorrow before moving forward.`
+    });
+  }
+  
+  // Behind by more than 5 days
+  const dayNum = getCurrentDayNumber();
+  const totalDaysLogged = Object.keys(logs).length;
+  const daysBehind = dayNum - totalDaysLogged;
+  
+  if (daysBehind > 5) {
+    const projectedDays = Math.round(365 * (dayNum / totalDaysLogged));
+    const projectedDate = addDays(parseDate(appData.settings.startDate), projectedDays);
+    feedback.push({
+      type: 'bad',
+      icon: '🚨',
+      text: `You are ${daysBehind} days behind schedule. At this pace, your projected finish date is ${projectedDate.toLocaleDateString()}. Increase your daily study time to catch up.`
+    });
+  }
+  
+  // No hands-on practice for 5 days
+  const recentPractice = recentLogs.slice(0, 5).filter(l => l.practiceActivities?.length > 0);
+  if (recentPractice.length === 0 && recentLogs.length >= 5) {
+    feedback.push({
+      type: 'warning',
+      icon: '⌨️',
+      text: `You have not written code in 5 days. Reading and watching is not enough — smart contract development requires daily coding. Build something small today.`
+    });
+  }
+  
+  // Default feedback if no logs
+  if (Object.keys(logs).length === 0) {
+    feedback.push({
+      type: 'good',
+      icon: '🚀',
+      text: `Welcome! Start logging your daily sessions to track your progress toward becoming a Smart Contract Developer.`
+    });
+  }
+  
+  return feedback;
+}
+
+// ══════════════════════════════════════════════
+// NAVIGATION
+// ══════════════════════════════════════════════
+function navigateTo(pageName) {
+  // Update navigation links
+  document.querySelectorAll('.nav-links a').forEach(link => {
+    link.classList.remove('active');
+    if (link.dataset.page === pageName) {
+      link.classList.add('active');
+    }
+  });
+  
+  // Show/hide pages
+  document.querySelectorAll('.page').forEach(page => {
+    page.classList.remove('active');
+  });
+  document.getElementById(`page-${pageName}`).classList.add('active');
+  
+  // Close mobile menu
+  document.getElementById('navLinks').classList.remove('open');
+  
+  // Refresh page content
+  switch (pageName) {
+    case 'dashboard':
+      renderDashboard();
+      break;
+    case 'daily-log':
+      renderDailyLog();
+      break;
+    case 'performance':
+      renderPerformance();
+      break;
+    case 'suggestions':
+      renderSuggestions();
+      break;
+    case 'settings':
+      renderSettings();
+      break;
+  }
+}
+
+function toggleMobileMenu() {
+  document.getElementById('navLinks').classList.toggle('open');
+}
+
+// ══════════════════════════════════════════════
+// RENDER FUNCTIONS
+// ══════════════════════════════════════════════
+function renderDashboard() {
+  const today = new Date();
+  const todayStr = formatDate(today);
+  const dayNumber = getCurrentDayNumber();
+  const phase = getCurrentPhase(dayNumber);
+  const todayLog = appData.logs[todayStr];
+  
+  // Header info
+  document.getElementById('currentDate').textContent = today.toLocaleDateString('en-US', { 
+    weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' 
+  });
+  document.getElementById('roadmapDay').textContent = `Day ${dayNumber} of 365`;
+  
+  // Streak
+  const streak = calculateStreak();
+  document.getElementById('streakCount').textContent = streak;
+  
+  // Stats
+  const logs = Object.values(appData.logs);
+  document.getElementById('totalDaysLogged').textContent = logs.length;
+  
+  const allCoveredTopics = new Set();
+  logs.forEach(l => (l.topicsCovered || []).forEach(t => allCoveredTopics.add(t)));
+  document.getElementById('totalTopics').textContent = allCoveredTopics.size;
+  
+  const totalHours = logs.reduce((sum, l) => sum + (l.hoursStudied || 0), 0);
+  document.getElementById('totalHours').textContent = totalHours.toFixed(1);
+  
+  const scores = logs.map(l => l.score || 0).filter(s => s > 0);
+  const avgScore = scores.length > 0 ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length) : 0;
+  document.getElementById('avgScore').textContent = avgScore;
+  
+  // Current Phase
+  document.getElementById('phaseNumber').textContent = `Phase ${phase.phase}`;
+  document.getElementById('phaseName').textContent = phase.name;
+  document.getElementById('phaseDates').textContent = `Months ${phase.months} (Days ${phase.startDay}-${phase.endDay})`;
+  
+  // Calculate phase progress
+  const phaseCoveredTopics = phase.topics.filter(t => allCoveredTopics.has(t));
+  const phasePercent = Math.round((phaseCoveredTopics.length / phase.topics.length) * 100);
+  document.getElementById('phaseTopicsProgress').textContent = `${phaseCoveredTopics.length} / ${phase.topics.length} topics`;
+  document.getElementById('phasePercent').textContent = `${phasePercent}%`;
+  document.getElementById('phaseProgressBar').style.width = `${phasePercent}%`;
+  
+  // Today's Status
+  const statusEl = document.getElementById('todayStatus');
+  const statusText = document.getElementById('statusText');
+  const statusSubtext = document.getElementById('statusSubtext');
+  
+  statusEl.className = 'today-status';
+  if (todayLog) {
+    if (todayLog.score >= 70) {
+      statusEl.classList.add('completed');
+      document.querySelector('.status-icon').textContent = '✅';
+      statusText.textContent = 'Completed';
+      statusSubtext.textContent = `Score: ${todayLog.score} - ${todayLog.verdict}`;
+    } else {
+      statusEl.classList.add('in-progress');
+      document.querySelector('.status-icon').textContent = '📝';
+      statusText.textContent = 'In Progress';
+      statusSubtext.textContent = `Score: ${todayLog.score} - Log more to improve`;
+    }
+  } else {
+    statusEl.classList.add('not-started');
+    document.querySelector('.status-icon').textContent = '⏳';
+    statusText.textContent = 'Not Started';
+    statusSubtext.textContent = 'Log your session to track progress';
+  }
+  
+  // Daily Target Topics
+  const targetTopics = getTopicsForDay(dayNumber);
+  const targetContainer = document.getElementById('targetTopics');
+  targetContainer.innerHTML = targetTopics.map(topic => {
+    const covered = todayLog?.topicsCovered?.includes(topic);
+    return `<span class="topic-tag ${covered ? 'covered' : ''}">${topic}</span>`;
+  }).join('');
+  
+  // Today's Score
+  const scoreCircle = document.getElementById('scoreCircle');
+  const scoreValue = document.getElementById('todayScore');
+  const scoreVerdict = document.getElementById('scoreVerdict');
+  
+  if (todayLog) {
+    const score = todayLog.score;
+    scoreCircle.style.background = `conic-gradient(${getScoreColor(score)} ${score * 3.6}deg, var(--bg-secondary) 0deg)`;
+    scoreValue.textContent = score;
+    scoreVerdict.textContent = todayLog.verdict;
+  } else {
+    scoreCircle.style.background = `conic-gradient(var(--bg-secondary) 0deg)`;
+    scoreValue.textContent = '-';
+    scoreVerdict.textContent = 'No session logged today';
+  }
+  
+  // Weekly Heatmap
+  const heatmapContainer = document.getElementById('weeklyHeatmap');
+  heatmapContainer.innerHTML = '';
+  
+  for (let i = 6; i >= 0; i--) {
+    const date = addDays(today, -i);
+    const dateStr = formatDate(date);
+    const log = appData.logs[dateStr];
+    const dayName = date.toLocaleDateString('en-US', { weekday: 'short' }).charAt(0);
+    
+    const div = document.createElement('div');
+    div.className = 'heatmap-day';
+    div.textContent = dayName;
+    
+    if (i === 0) div.classList.add('today');
+    if (log) {
+      div.classList.add('logged');
+    } else {
+      div.classList.add('missed');
+    }
+    
+    heatmapContainer.appendChild(div);
+  }
+  
+  // Feedback
+  const feedbackList = document.getElementById('feedbackList');
+  const feedback = generateFeedback();
+  
+  if (feedback.length === 0) {
+    feedbackList.innerHTML = '<p class="text-muted">Log your sessions to receive personalized feedback.</p>';
+  } else {
+    feedbackList.innerHTML = feedback.map(f => `
+      <div class="feedback-item ${f.type}">
+        <span class="feedback-icon">${f.icon}</span>
+        <span class="feedback-text">${f.text}</span>
+      </div>
+    `).join('');
+  }
+}
+
+function renderDailyLog() {
+  const today = new Date();
+  const todayStr = formatDate(today);
+  const dayNumber = getCurrentDayNumber();
+  const phase = getCurrentPhase(dayNumber);
+  
+  // Date display
+  document.getElementById('logDateDisplay').textContent = today.toLocaleDateString('en-US', { 
+    weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' 
+  });
+  
+  // Pre-fill with existing log if any
+  const todayLog = appData.logs[todayStr];
+  if (todayLog) {
+    document.getElementById('hoursStudied').value = todayLog.hoursStudied || 0;
+    document.getElementById('notes').value = todayLog.notes || '';
+    
+    if (todayLog.mood) {
+      selectMood(todayLog.mood);
+    }
+  }
+  
+  // Topics checkboxes - show current phase topics plus adjacent phases
+  const topicsContainer = document.getElementById('topicsCheckboxes');
+  const recommendedTopics = getTopicsForDay(dayNumber);
+  const allPhaseTopics = [];
+  
+  // Current phase topics
+  allPhaseTopics.push(...phase.topics);
+  
+  // Previous phase topics (if exists)
+  const phaseIndex = ROADMAP.findIndex(p => p.phase === phase.phase);
+  if (phaseIndex > 0) {
+    allPhaseTopics.push(...ROADMAP[phaseIndex - 1].topics);
+  }
+  
+  // Next phase topics (if exists)
+  if (phaseIndex < ROADMAP.length - 1) {
+    allPhaseTopics.push(...ROADMAP[phaseIndex + 1].topics);
+  }
+  
+  // Remove duplicates
+  const uniqueTopics = [...new Set(allPhaseTopics)];
+  
+  topicsContainer.innerHTML = uniqueTopics.map(topic => {
+    const isRecommended = recommendedTopics.includes(topic);
+    const isChecked = todayLog?.topicsCovered?.includes(topic) || false;
+    
+    return `
+      <label class="checkbox-item" style="${isRecommended ? 'border-color: var(--accent);' : ''}">
+        <input type="checkbox" name="topics" value="${topic}" ${isChecked ? 'checked' : ''} onchange="updateRatingsUI()">
+        <span class="check-box"></span>
+        <span class="check-label">${topic}${isRecommended ? ' ⭐' : ''}</span>
+      </label>
+    `;
+  }).join('');
+  
+  // Update ratings UI
+  updateRatingsUI(todayLog);
+  
+  // Pre-fill practice activities
+  if (todayLog?.practiceActivities) {
+    document.querySelectorAll('#practiceCheckboxes input[name="practice"]').forEach(cb => {
+      cb.checked = todayLog.practiceActivities.includes(cb.value);
+    });
+  }
+  
+  // Pre-fill challenges
+  if (todayLog?.challenges) {
+    document.querySelectorAll('#challengesCheckboxes input[name="challenges"]').forEach(cb => {
+      cb.checked = todayLog.challenges.includes(cb.value);
+    });
+  }
+}
+
+function updateRatingsUI(existingLog = null) {
+  const selectedTopics = Array.from(document.querySelectorAll('#topicsCheckboxes input[name="topics"]:checked'))
+    .map(cb => cb.value);
+  
+  const ratingsCard = document.getElementById('ratingsCard');
+  const ratingsContainer = document.getElementById('understandingRatings');
+  
+  if (selectedTopics.length === 0) {
+    ratingsCard.style.display = 'none';
+    return;
+  }
+  
+  ratingsCard.style.display = 'block';
+  
+  ratingsContainer.innerHTML = selectedTopics.map(topic => {
+    const existingRating = existingLog?.understandingRatings?.[topic] || 5;
+    return `
+      <div class="rating-slider-container">
+        <div class="rating-slider-header">
+          <span>${topic}</span>
+          <span class="rating-value" id="rating-${topic.replace(/[^a-zA-Z0-9]/g, '')}">${existingRating}</span>
+        </div>
+        <input type="range" class="rating-slider" 
+               name="rating-${topic}" 
+               data-topic="${topic}"
+               min="1" max="10" value="${existingRating}"
+               oninput="updateRatingDisplay(this, '${topic}')">
+      </div>
+    `;
+  }).join('');
+}
+
+function updateRatingDisplay(slider, topic) {
+  const displayId = `rating-${topic.replace(/[^a-zA-Z0-9]/g, '')}`;
+  document.getElementById(displayId).textContent = slider.value;
+}
+
+function selectMood(mood) {
+  document.querySelectorAll('.mood-option').forEach(opt => {
+    opt.classList.remove('selected');
+    if (opt.dataset.mood === mood) {
+      opt.classList.add('selected');
+    }
+  });
+  document.getElementById('selectedMood').value = mood;
+}
+
+function renderPerformance() {
+  const logs = appData.logs;
+  const logDates = Object.keys(logs).sort();
+  const dayNumber = getCurrentDayNumber();
+  
+  // Overall Progress
+  const totalDaysLogged = logDates.length;
+  const overallPercent = Math.round((dayNumber / 365) * 100);
+  document.getElementById('overallPercent').textContent = `${overallPercent}%`;
+  document.getElementById('overallProgressBar').style.width = `${overallPercent}%`;
+  document.getElementById('daysCompleted').textContent = `${dayNumber} / 365`;
+  
+  // Projected finish date
+  if (totalDaysLogged > 0) {
+    const avgDaysPerLog = dayNumber / totalDaysLogged;
+    const remainingDays = 365 - dayNumber;
+    const projectedDays = Math.round(remainingDays * avgDaysPerLog);
+    const projectedFinish = addDays(new Date(), projectedDays);
+    document.getElementById('projectedFinish').textContent = projectedFinish.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    
+    // Pace status
+    const paceEl = document.getElementById('paceStatus');
+    if (totalDaysLogged >= dayNumber * 0.9) {
+      paceEl.textContent = '✅ On Track';
+      paceEl.style.color = 'var(--success)';
+    } else if (totalDaysLogged >= dayNumber * 0.7) {
+      paceEl.textContent = '⚠️ Slipping';
+      paceEl.style.color = 'var(--warning)';
+    } else {
+      paceEl.textContent = '🚨 Behind';
+      paceEl.style.color = 'var(--danger)';
+    }
+  } else {
+    document.getElementById('projectedFinish').textContent = '-';
+    document.getElementById('paceStatus').textContent = 'N/A';
+  }
+  
+  // Weekly Chart
+  const chartContainer = document.getElementById('weeklyChart');
+  chartContainer.innerHTML = '';
+  
+  for (let i = 6; i >= 0; i--) {
+    const date = addDays(new Date(), -i);
+    const dateStr = formatDate(date);
+    const log = logs[dateStr];
+    const score = log?.score || 0;
+    const dayName = date.toLocaleDateString('en-US', { weekday: 'short' });
+    
+    const bar = document.createElement('div');
+    bar.className = 'bar';
+    bar.innerHTML = `
+      <div class="bar-fill" style="height: ${Math.max(score * 1.5, 5)}px; background: ${getScoreColor(score)};" data-score="${score}"></div>
+      <span class="bar-label">${dayName}</span>
+    `;
+    chartContainer.appendChild(bar);
+  }
+  
+  // Monthly Heatmap
+  const heatmapContainer = document.getElementById('monthlyHeatmap');
+  heatmapContainer.innerHTML = '';
+  
+  const today = new Date();
+  const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
+  const lastDay = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+  
+  // Add day headers
+  ['S', 'M', 'T', 'W', 'T', 'F', 'S'].forEach(day => {
+    const header = document.createElement('div');
+    header.className = 'heatmap-cell';
+    header.textContent = day;
+    header.style.background = 'transparent';
+    header.style.color = 'var(--text-muted)';
+    heatmapContainer.appendChild(header);
+  });
+  
+  // Add empty cells for days before first of month
+  for (let i = 0; i < firstDay.getDay(); i++) {
+    const empty = document.createElement('div');
+    empty.className = 'heatmap-cell';
+    empty.style.background = 'transparent';
+    heatmapContainer.appendChild(empty);
+  }
+  
+  // Add days
+  for (let day = 1; day <= lastDay.getDate(); day++) {
+    const date = new Date(today.getFullYear(), today.getMonth(), day);
+    const dateStr = formatDate(date);
+    const log = logs[dateStr];
+    
+    const cell = document.createElement('div');
+    cell.className = 'heatmap-cell';
+    cell.textContent = day;
+    
+    if (date > today) {
+      // Future date
+      cell.style.opacity = '0.3';
+    } else if (log) {
+      if (log.score >= 70) {
+        cell.classList.add('good');
+      } else if (log.score >= 40) {
+        cell.classList.add('average');
+      } else {
+        cell.classList.add('missed');
+      }
+    } else {
+      cell.classList.add('missed');
+    }
+    
+    heatmapContainer.appendChild(cell);
+  }
+  
+  // Streak stats
+  document.getElementById('currentStreak').textContent = calculateStreak();
+  document.getElementById('longestStreak').textContent = calculateLongestStreak();
+  
+  // Calculate missed days
+  const startDate = parseDate(appData.settings.startDate);
+  const offDays = appData.settings.offDays || [];
+  let missedCount = 0;
+  
+  for (let d = new Date(startDate); d <= today; d = addDays(d, 1)) {
+    const dateStr = formatDate(d);
+    const dayName = getDayName(d);
+    if (!offDays.includes(dayName) && !logs[dateStr]) {
+      missedCount++;
+    }
+  }
+  document.getElementById('totalMissed').textContent = missedCount;
+  
+  // Phase Completion
+  const phaseContainer = document.getElementById('phaseCompletion');
+  const allCoveredTopics = new Set();
+  Object.values(logs).forEach(l => (l.topicsCovered || []).forEach(t => allCoveredTopics.add(t)));
+  
+  phaseContainer.innerHTML = ROADMAP.map(phase => {
+    const covered = phase.topics.filter(t => allCoveredTopics.has(t)).length;
+    const percent = Math.round((covered / phase.topics.length) * 100);
+    
+    return `
+      <div style="margin-bottom: 0.75rem;">
+        <div style="display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 0.25rem;">
+          <span>Phase ${phase.phase}</span>
+          <span>${percent}%</span>
+        </div>
+        <div class="progress-bar" style="height: 6px;">
+          <div class="progress-fill ${percent === 100 ? 'success' : ''}" style="width: ${percent}%"></div>
+        </div>
+      </div>
+    `;
+  }).join('');
+  
+  // Strong & Weak Areas
+  const allRatings = {};
+  Object.values(logs).forEach(log => {
+    if (log.understandingRatings) {
+      Object.entries(log.understandingRatings).forEach(([topic, rating]) => {
+        if (!allRatings[topic]) allRatings[topic] = [];
+        allRatings[topic].push(rating);
+      });
+    }
+  });
+  
+  const strongAreas = Object.entries(allRatings)
+    .filter(([topicName, ratings]) => {
+      const avg = ratings.reduce((a, b) => a + b, 0) / ratings.length;
+      return avg >= 8;
+    })
+    .map(([topicName]) => topicName);
+  
+  const weakAreas = Object.entries(allRatings)
+    .filter(([topicName, ratings]) => {
+      const avg = ratings.reduce((a, b) => a + b, 0) / ratings.length;
+      return avg <= 5;
+    })
+    .map(([topicName]) => topicName);
+  
+  document.getElementById('strongAreas').innerHTML = strongAreas.length > 0
+    ? strongAreas.map(t => `<span class="badge badge-success" style="margin: 0.25rem;">${t}</span>`).join('')
+    : '<p class="text-muted">Rate topics 8+ to see your strong areas</p>';
+  
+  document.getElementById('weakAreas').innerHTML = weakAreas.length > 0
+    ? weakAreas.map(t => `<span class="badge badge-danger" style="margin: 0.25rem;">${t}</span>`).join('')
+    : '<p class="text-muted">Topics rated 5 or below will appear here</p>';
+  
+  // Verdict
+  const verdictBox = document.getElementById('verdictBox');
+  const verdictTitle = document.getElementById('verdictTitle');
+  const verdictText = document.getElementById('verdictText');
+  
+  verdictBox.className = 'verdict-box';
+  
+  if (totalDaysLogged === 0) {
+    verdictBox.classList.add('on-track');
+    verdictTitle.textContent = '📊 Start Your Journey';
+    verdictText.textContent = 'Log your first session to see your performance verdict.';
+  } else if (totalDaysLogged >= dayNumber * 0.9 && logs[formatDate(today)]?.score >= 70) {
+    verdictBox.classList.add('excellent');
+    verdictTitle.textContent = '🏆 Excellent';
+    verdictText.textContent = 'You are ahead of schedule. Keep this pace and you will be job-ready early!';
+  } else if (totalDaysLogged >= dayNumber * 0.7) {
+    verdictBox.classList.add('on-track');
+    verdictTitle.textContent = '✅ On Track';
+    verdictText.textContent = 'Good consistency. Focus on weak areas to stay strong.';
+  } else if (totalDaysLogged >= dayNumber * 0.5) {
+    verdictBox.classList.add('slipping');
+    verdictTitle.textContent = '⚠️ Slipping';
+    verdictText.textContent = `You are falling behind. Here is what you need to do this week to catch up: Study at least ${appData.settings.dailyGoalHours + 1} hours daily and focus on ${getCurrentPhase(dayNumber).name}.`;
+  } else {
+    verdictBox.classList.add('critical');
+    verdictTitle.textContent = '🚨 Critical';
+    verdictText.textContent = 'You have missed too many days. Consider revising your schedule and committing to at least 30 minutes daily to get back on track.';
+  }
+  
+  // Performance Feedback
+  const feedbackContainer = document.getElementById('performanceFeedback');
+  const feedback = generateFeedback();
+  feedbackContainer.innerHTML = feedback.map(f => `
+    <div class="feedback-item ${f.type}">
+      <span class="feedback-icon">${f.icon}</span>
+      <span class="feedback-text">${f.text}</span>
+    </div>
+  `).join('') || '<p class="text-muted">Log more sessions to get detailed insights.</p>';
+}
+
+function renderSuggestions() {
+  const dayNumber = getCurrentDayNumber();
+  const phase = getCurrentPhase(dayNumber);
+  const logs = appData.logs;
+  
+  // Today's recommended topics
+  const recommendedTopics = getTopicsForDay(dayNumber);
+  document.getElementById('suggestedTopics').innerHTML = recommendedTopics.map(topic => 
+    `<span class="topic-tag">${topic}</span>`
+  ).join('');
+  
+  // Hours calculation
+  const daysLeftInPhase = phase.duration - phase.currentDayInPhase + 1;
+  const allCoveredTopics = new Set();
+  Object.values(logs).forEach(l => (l.topicsCovered || []).forEach(t => allCoveredTopics.add(t)));
+  const topicsLeftInPhase = phase.topics.filter(t => !allCoveredTopics.has(t)).length;
+  const topicsPerDay = Math.ceil(topicsLeftInPhase / daysLeftInPhase);
+  const minHours = Math.max(appData.settings.dailyGoalHours, topicsPerDay * 0.5);
+  
+  document.getElementById('minHoursValue').textContent = minHours.toFixed(1);
+  document.getElementById('hoursCalculation').innerHTML = `
+    <strong>Formula:</strong><br>
+    You have <strong>${topicsLeftInPhase} topics</strong> left in Phase ${phase.phase} (${phase.name})<br>
+    with <strong>${daysLeftInPhase} days</strong> remaining.<br>
+    You need to cover at least <strong>${topicsPerDay} topics per day</strong>.
+  `;
+  
+  // Status message
+  const totalDaysLogged = Object.keys(logs).length;
+  const daysBehind = dayNumber - totalDaysLogged;
+  const statusCard = document.getElementById('statusMessageCard');
+  const statusTitle = document.getElementById('statusMessageTitle');
+  const statusMessage = document.getElementById('statusMessage');
+  const catchUpPlan = document.getElementById('catchUpPlan');
+  
+  if (daysBehind > 5) {
+    // Behind
+    statusTitle.textContent = '⚠️ You\'re Behind Schedule';
+    statusTitle.style.color = 'var(--warning)';
+    statusMessage.textContent = `You are ${daysBehind} days behind. To get back on track in 2 weeks, follow this plan:`;
+    catchUpPlan.style.display = 'block';
+    catchUpPlan.innerHTML = `
+      <div style="background: var(--bg-secondary); padding: 1rem; border-radius: 8px; margin-top: 0.5rem;">
+        <p>📚 Study <strong>${(appData.settings.dailyGoalHours + 2).toFixed(1)} hours/day</strong></p>
+        <p>📝 Cover <strong>${topicsPerDay + 1} topics per day</strong></p>
+        <p>⏰ Reduce off days temporarily</p>
+        <p>🎯 Focus on: ${phase.name}</p>
+      </div>
+    `;
+  } else if (daysBehind < -2) {
+    // Ahead
+    statusTitle.textContent = '🚀 You\'re Ahead of Schedule!';
+    statusTitle.style.color = 'var(--success)';
+    statusMessage.innerHTML = `
+      Excellent work! You're ahead by ${Math.abs(daysBehind)} days. Use this extra time for:
+      <ul style="margin-top: 0.5rem; padding-left: 1.25rem;">
+        <li>Deeper practice on complex topics</li>
+        <li>Extra security challenges on Ethernaut</li>
+        <li>Contributing to open-source smart contracts</li>
+        <li>Building additional portfolio projects</li>
+      </ul>
+    `;
+    catchUpPlan.style.display = 'none';
+  } else {
+    // On track
+    statusTitle.textContent = '✅ You\'re On Track';
+    statusTitle.style.color = 'var(--accent)';
+    statusMessage.innerHTML = `
+      Great job maintaining your pace! Keep up the consistency.
+      <br><br>
+      <strong>Bonus suggestion:</strong> Try getting ahead by studying an extra topic today: 
+      <span class="badge badge-primary">${phase.topics[Math.min(phase.currentDayInPhase, phase.topics.length - 1)]}</span>
+    `;
+    catchUpPlan.style.display = 'none';
+  }
+  
+  // Resources
+  const resourceList = document.getElementById('resourceList');
+  resourceList.innerHTML = phase.resources.map(res => `
+    <li>
+      <div class="resource-icon">📖</div>
+      <div>
+        <div style="font-weight: 500;">${res.name}</div>
+        <div class="text-muted" style="font-size: 0.8rem;">${res.url}</div>
+      </div>
+    </li>
+  `).join('');
+  
+  // Interview question of the day
+  const today = new Date();
+  const questionIndex = today.getDate() % INTERVIEW_QUESTIONS.length;
+  document.getElementById('interviewQuestion').textContent = INTERVIEW_QUESTIONS[questionIndex];
+}
+
+function renderSettings() {
+  // Start date
+  document.getElementById('startDate').value = appData.settings.startDate;
+  
+  // Daily goal
+  document.getElementById('dailyGoal').value = appData.settings.dailyGoalHours;
+  
+  // Off days
+  const offDays = appData.settings.offDays || [];
+  document.querySelectorAll('#offDaysSelector .day-chip').forEach(chip => {
+    chip.classList.toggle('selected', offDays.includes(chip.dataset.day));
+  });
+}
+
+// ══════════════════════════════════════════════
+// SETTINGS FUNCTIONS
+// ══════════════════════════════════════════════
+function toggleOffDay(day) {
+  const offDays = appData.settings.offDays || [];
+  const index = offDays.indexOf(day);
+  
+  if (index > -1) {
+    offDays.splice(index, 1);
+  } else {
+    offDays.push(day);
+  }
+  
+  appData.settings.offDays = offDays;
+  
+  // Update UI
+  const chip = document.querySelector(`#offDaysSelector .day-chip[data-day="${day}"]`);
+  chip.classList.toggle('selected', offDays.includes(day));
+}
+
+function saveSettings() {
+  appData.settings.startDate = document.getElementById('startDate').value;
+  appData.settings.dailyGoalHours = parseFloat(document.getElementById('dailyGoal').value);
+  
+  saveData();
+  showModal('Settings Saved', '<p>Your settings have been saved successfully!</p>', [
+    { text: 'OK', class: 'btn-primary', action: 'closeModal()' }
+  ]);
+}
+
+function exportData() {
+  const dataStr = JSON.stringify(appData, null, 2);
+  const blob = new Blob([dataStr], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `blockchain-tracker-${formatDate(new Date())}.json`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+function confirmReset() {
+  showModal('Reset All Data?', `
+    <p style="color: var(--danger); margin-bottom: 1rem;">⚠️ This action cannot be undone!</p>
+    <p>All your learning logs, settings, and progress will be permanently deleted.</p>
+  `, [
+    { text: 'Cancel', class: 'btn-outline', action: 'closeModal()' },
+    { text: 'Reset Everything', class: 'btn-danger', action: 'resetAllData()' }
+  ]);
+}
+
+function resetAllData() {
+  localStorage.removeItem(STORAGE_KEY);
+  appData = {
+    settings: {
+      startDate: new Date().toISOString().split('T')[0],
+      dailyGoalHours: 2,
+      offDays: ["Sunday"]
+    },
+    logs: {}
+  };
+  saveData();
+  closeModal();
+  navigateTo('dashboard');
+  showModal('Data Reset', '<p>All data has been reset. Start fresh!</p>', [
+    { text: 'OK', class: 'btn-primary', action: 'closeModal()' }
+  ]);
+}
+
+// ══════════════════════════════════════════════
+// MODAL FUNCTIONS
+// ══════════════════════════════════════════════
+function showModal(title, content, buttons = []) {
+  document.getElementById('modalTitle').textContent = title;
+  document.getElementById('modalBody').innerHTML = content;
+  
+  const footer = document.getElementById('modalFooter');
+  footer.innerHTML = buttons.map(btn => 
+    `<button class="btn ${btn.class}" onclick="${btn.action}">${btn.text}</button>`
+  ).join('');
+  
+  document.getElementById('modalOverlay').classList.add('active');
+}
+
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('active');
+}
+
+// ══════════════════════════════════════════════
+// FORM SUBMISSION
+// ══════════════════════════════════════════════
+document.getElementById('dailyLogForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  
+  const todayStr = formatDate(new Date());
+  const dayNumber = getCurrentDayNumber();
+  const recommendedTopics = getTopicsForDay(dayNumber);
+  
+  // Gather form data
+  const hoursStudied = parseFloat(document.getElementById('hoursStudied').value) || 0;
+  
+  const topicsCovered = Array.from(document.querySelectorAll('#topicsCheckboxes input[name="topics"]:checked'))
+    .map(cb => cb.value);
+  
+  const practiceActivities = Array.from(document.querySelectorAll('#practiceCheckboxes input[name="practice"]:checked'))
+    .map(cb => cb.value);
+  
+  const understandingRatings = {};
+  document.querySelectorAll('#understandingRatings input[type="range"]').forEach(slider => {
+    understandingRatings[slider.dataset.topic] = parseInt(slider.value);
+  });
+  
+  const mood = document.getElementById('selectedMood').value;
+  const notes = document.getElementById('notes').value;
+  
+  const challenges = Array.from(document.querySelectorAll('#challengesCheckboxes input[name="challenges"]:checked'))
+    .map(cb => cb.value);
+  
+  // Create log entry
+  const logEntry = {
+    hoursStudied,
+    topicsCovered,
+    practiceActivities,
+    understandingRatings,
+    mood,
+    notes,
+    challenges
+  };
+  
+  // Calculate score
+  const score = calculateDailyScore(logEntry, recommendedTopics);
+  const verdict = getScoreVerdict(score);
+  
+  logEntry.score = score;
+  logEntry.verdict = verdict;
+  
+  // Save log
+  appData.logs[todayStr] = logEntry;
+  saveData();
+  
+  // Show analysis modal
+  showModal('Session Logged! 🎉', `
+    <div style="text-align: center;">
+      <div style="font-size: 3rem; margin-bottom: 1rem;">
+        ${score >= 70 ? '🌟' : score >= 50 ? '👍' : '💪'}
+      </div>
+      <div style="font-size: 2.5rem; font-weight: 700; color: ${getScoreColor(score)}; margin-bottom: 0.5rem;">
+        ${score}
+      </div>
+      <div style="font-size: 1.1rem; margin-bottom: 1.5rem;">${verdict}</div>
+      
+      <div style="text-align: left; background: var(--bg-secondary); padding: 1rem; border-radius: 8px;">
+        <p><strong>📚 Topics Covered:</strong> ${topicsCovered.length}</p>
+        <p><strong>⏱️ Hours Studied:</strong> ${hoursStudied}</p>
+        <p><strong>🛠️ Practice Activities:</strong> ${practiceActivities.length}</p>
+        ${mood ? `<p><strong>😊 Mood:</strong> ${mood}</p>` : ''}
+      </div>
+    </div>
+  `, [
+    { text: 'View Dashboard', class: 'btn-primary', action: 'closeModal(); navigateTo("dashboard")' }
+  ]);
+});
+
+// ══════════════════════════════════════════════
+// INITIALIZATION
+// ══════════════════════════════════════════════
+document.addEventListener('DOMContentLoaded', function() {
+  // Load saved data
+  loadData();
+  
+  // Setup navigation
+  document.querySelectorAll('.nav-links a').forEach(link => {
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      navigateTo(this.dataset.page);
+    });
+  });
+  
+  // Close modal on overlay click
+  document.getElementById('modalOverlay').addEventListener('click', function(e) {
+    if (e.target === this) {
+      closeModal();
+    }
+  });
+  
+  // Initialize dashboard
+  renderDashboard();
+});
+</script>
+
+</body>
+</html>
