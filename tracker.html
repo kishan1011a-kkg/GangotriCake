@@ -465,7 +465,7 @@ function generateFeedback(){
   else if(streak>=3) msgs.push({type:'good',text:`${streak}-day streak! You are building a solid habit.`});
 
   const todayLog = getTodayLog();
-  if(todayLog && todayLog.hoursStudied >= 3) msgs.push({type:'good',text:'Strong study session &mdash; 3+ hours today!'});
+  if(todayLog && todayLog.hoursStudied >= 3) msgs.push({type:'good',text:'Strong study session — 3+ hours today!'});
 
   const allRatings = {};
   Object.values(APP.logs).forEach(log=>{
@@ -597,7 +597,7 @@ function renderDashboard(){
       <div class="card" style="text-align:center">
         <div class="card-label">🔥 Streak</div>
         <div class="streak-display" style="justify-content:center;margin-top:8px">
-          ${streak > 0 ? '🔥'.repeat(Math.min(streak,5)) : '—'}
+          <span role="img" aria-label="${streak} day streak">${streak > 0 ? '🔥'.repeat(Math.min(streak,5)) : '—'}</span>
           <span>${streak} day${streak!==1?'s':''}</span>
         </div>
       </div>
@@ -890,9 +890,10 @@ function renderPerformance(){
   const pace = getPaceStatus();
 
   // Projected finish
-  const avgPerDay = totalLogged > 0 ? totalLogged / Math.max(rd, 1) : 0;
-  const remainingDays = TOTAL_DAYS - rd + 1;
-  const projectedDaysLeft = avgPerDay > 0 ? Math.ceil(remainingDays / avgPerDay) : remainingDays;
+  const calendarDaysSoFar = Math.max(rd, 1);
+  const logRate = totalLogged > 0 ? totalLogged / calendarDaysSoFar : 0;
+  const remainingDays = Math.max(TOTAL_DAYS - rd + 1, 0);
+  const projectedDaysLeft = logRate > 0 ? Math.ceil(remainingDays / logRate) : remainingDays;
   const projFinish = new Date();
   projFinish.setDate(projFinish.getDate() + projectedDaysLeft);
   const projFinishStr = projFinish.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
@@ -1256,8 +1257,14 @@ function importDataPrompt(){
     reader.onload = function(ev){
       try{
         const data = JSON.parse(ev.target.result);
-        if(data.settings && data.logs && typeof data.settings.startDate === 'string' && typeof data.settings.dailyGoalHours === 'number' && typeof data.logs === 'object'){
+        if(data.settings && data.logs
+           && typeof data.settings.startDate === 'string'
+           && typeof data.settings.dailyGoalHours === 'number'
+           && Array.isArray(data.settings.offDays)
+           && typeof data.logs === 'object' && !Array.isArray(data.logs)
+           && Object.values(data.logs).every(l => typeof l === 'object' && 'score' in l)){
           APP = data;
+          if(!APP.inProgress) APP.inProgress = [];
           saveData(APP);
           navigateTo('settings');
           showModal('<h2>✅ Import Successful</h2><p>Your data has been imported.</p>');
