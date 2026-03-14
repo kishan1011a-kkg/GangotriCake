@@ -301,13 +301,15 @@ function saveData(data){localStorage.setItem(STORAGE_KEY,JSON.stringify(data));}
 let APP = loadData();
 
 /* ==================== UTILS ==================== */
+const MS_PER_DAY = 86400000;
 function getDateStr(d){
   const y=d.getFullYear(), m=String(d.getMonth()+1).padStart(2,'0'), day=String(d.getDate()).padStart(2,'0');
   return `${y}-${m}-${day}`;
 }
 function parseDate(s){const p=s.split('-');return new Date(+p[0],+p[1]-1,+p[2]);}
-function daysBetween(a,b){return Math.round((b-a)/(86400000));}
+function daysBetween(a,b){return Math.round((b-a)/MS_PER_DAY);}
 function today(){return getDateStr(new Date());}
+function getTodayLog(){return APP.logs[today()] || null;}
 function getDayName(d){return d.toLocaleDateString('en-US',{weekday:'long'});}
 function formatDate(s){return parseDate(s).toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric',year:'numeric'});}
 
@@ -461,8 +463,8 @@ function generateFeedback(){
   if(streak>=7) msgs.push({type:'good',text:`One week streak! 🔥 ${streak} days in a row — incredible discipline!`});
   else if(streak>=3) msgs.push({type:'good',text:`${streak}-day streak! You are building a solid habit.`});
 
-  const todayLog = APP.logs[today()];
-  if(todayLog && todayLog.hoursStudied >= 3) msgs.push({type:'good',text:'Strong study session — 3+ hours today!'});
+  const todayLog = getTodayLog();
+  if(todayLog && todayLog.hoursStudied >= 3) msgs.push({type:'good',text:'Strong study session &mdash; 3+ hours today!'});
 
   const allRatings = {};
   Object.values(APP.logs).forEach(log=>{
@@ -542,8 +544,7 @@ function renderDashboard(){
   const phaseProgress = Math.round((dayInPhase / phase.days) * 100);
   const overallProgress = Math.round(((rd - 1) / TOTAL_DAYS) * 100);
   const todayTopics = getTopicsForDay(dayInPhase, phase);
-  const todayLog = APP.logs[today()];
-  const todayScore = todayLog ? todayLog.score : 0;
+  const todayLog = getTodayLog();  const todayScore = todayLog ? todayLog.score : 0;
   const streak = getStreak();
   const status = todayLog ? 'Completed' : (APP.inProgress && APP.inProgress.includes(today()) ? 'In Progress' : 'Not Started');
   const statusCls = status==='Completed'?'badge-green':status==='In Progress'?'badge-yellow':'badge-red';
@@ -627,9 +628,7 @@ function renderLog(){
   const phase = info.phase;
   const dayInPhase = info.dayInPhase;
   const todayTopics = getTopicsForDay(dayInPhase, phase);
-  const existingLog = APP.logs[today()];
-
-  // Mark in progress
+  const existingLog = getTodayLog();
   if(!APP.inProgress) APP.inProgress = [];
   if(!APP.inProgress.includes(today()) && !existingLog){
     APP.inProgress.push(today());
@@ -735,7 +734,7 @@ function renderLog(){
 
 function toggleCheckItem(label){
   const cb = label.querySelector('input[type=checkbox]');
-  setTimeout(()=>{ label.classList.toggle('checked', cb.checked); }, 0);
+  label.classList.toggle('checked', cb.checked);
 }
 
 function selectMood(btn){
@@ -758,7 +757,7 @@ function updateUnderstandingSliders(){
   const container = document.getElementById('understanding-sliders');
   if(!container) return;
   const checked = Array.from(document.querySelectorAll('input[name=topic]:checked')).map(c=>c.value);
-  const existingLog = APP.logs[today()];
+  const existingLog = getTodayLog();
   const existingRatings = existingLog ? existingLog.understandingRatings || {} : {};
   if(checked.length === 0){
     container.innerHTML = '<p style="color:var(--text2);font-size:.85rem">Check topics above to rate your understanding.</p>';
@@ -1100,7 +1099,9 @@ function renderSuggestions(){
   }
 
   // Interview question of the day
-  const dayOfYear = Math.floor((new Date() - new Date(new Date().getFullYear(),0,0)) / 86400000);
+  const now = new Date();
+  const startOfYear = new Date(now.getFullYear(), 0, 1);
+  const dayOfYear = Math.floor(daysBetween(startOfYear, now)) + 1;
   const qIdx = dayOfYear % INTERVIEW_QUESTIONS.length;
   const iq = INTERVIEW_QUESTIONS[qIdx];
 
@@ -1236,7 +1237,7 @@ function exportData(){
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = `blockchain_tracker_${today()}.json`;
+  a.download = `sc_dev_tracker_${today()}.json`;
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
